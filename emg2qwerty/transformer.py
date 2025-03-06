@@ -19,7 +19,7 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 eval_iters = 200
 n_embd = 384
 n_head = 6
-n_layer = 6
+n_layer = 12
 dropout = 0.2
 #seq_len = # is this variable
 num_classes = charset().num_classes
@@ -32,7 +32,7 @@ class Head(nn.Module):
         self.key = nn.Linear(n_embd, head_size, bias=False)
         self.query = nn.Linear(n_embd, head_size, bias=False)
         self.value = nn.Linear(n_embd, head_size, bias=False)
-        #self.register_buffer('tril', torch.tril(torch.ones(block_size, block_size)))
+        self.register_buffer('tril', torch.tril(torch.ones(block_size, block_size)))
 
         self.dropout = nn.Dropout(dropout)
 
@@ -42,7 +42,7 @@ class Head(nn.Module):
         q = self.query(x)
 
         attn_weights = k@q.transpose(-2, -1) * k.shape[-1] ** -0.5
-        attn_weights = F.softmax(attn_weights)
+        attn_weights = F.softmax(attn_weights, dim=-1)
         attn_weights = self.dropout(attn_weights)
 
         v = self.value(x)
@@ -91,7 +91,7 @@ class Block(nn.Module):
         return x
 
 class PositionalEncoding(nn.Module):
-    def __init__(self, d_model, dropout, max_seq_len):
+    def __init__(self, d_model, dropout, max_seq_len=5000):
         """
         d_model: the embedding dimension
         dropout: dropout rate
@@ -170,8 +170,8 @@ class Transformer(nn.Module):
         
         pos_enc = PositionalEncoding(n_embd, dropout, max_len)
         tok_emb = self.tokenizer(x) # (B,T,C)
-        tok_emb = tok_emb.permute(1, 0, 2)
-        x = tok_emb + pos_enc(tok_emb, seq_len) # (B,T,C)
+        #tok_emb = tok_emb.permute(1, 0, 2)
+        x = tok_emb + pos_enc(tok_emb) # (B,T,C)
         x = self.blocks(x) # (B,T,C)
         x = self.ln_f(x) # (B,T,C)
         logits = self.lm_head(x) # (B,T,n_classes)
