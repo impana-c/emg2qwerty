@@ -170,8 +170,8 @@ class Transformer(nn.Module):
         
         pos_enc = PositionalEncoding(n_embd, dropout, max_len)
         tok_emb = self.tokenizer(x) # (B,T,C)
-        #tok_emb = tok_emb.permute(1, 0, 2)
-        x = tok_emb + pos_enc(tok_emb) # (B,T,C)
+        tok_emb = tok_emb.permute(1, 0, 2)
+        x = pos_enc(tok_emb) # (B,T,C)
         x = self.blocks(x) # (B,T,C)
         x = self.ln_f(x) # (B,T,C)
         logits = self.lm_head(x) # (B,T,n_classes)

@@ -169,7 +169,7 @@ class TransformerModel(pl.LightningModule):
         self.save_hyperparameters()
         # try pretrain GPT-2 and then freeze tokenizer and last linear layer
         num_features = self.NUM_BANDS * mlp_features[-1]
-        encoder_layer = nn.TransformerEncoderLayer(num_features, n_head, 4*num_features, dropout, batch_first=False)
+        encoder_layer = nn.TransformerEncoderLayer(num_features, n_head, 4*num_features, dropout, batch_first=True)
         # inputs: (T, N, bands=2, electrode_channels=16, freq)
         # add contextualized transformer at the start and then use TDSConv
         self.tokenizer = nn.Sequential(
@@ -181,16 +181,16 @@ class TransformerModel(pl.LightningModule):
                 mlp_features=mlp_features,
                 num_bands=self.NUM_BANDS,
             ),
-            nn.Flatten(start_dim=2), 
-            nn.Linear(num_features, num_features)
+            nn.Flatten(start_dim=2)
+            # nn.Linear(num_features, num_features)
         )
         self.positional_encoding = PositionalEncoding(num_features, dropout)
         # Model
-        self.model = nn.Sequential(
-            nn.TransformerEncoder(encoder_layer, n_layer),
-            nn.Linear(num_features, charset().num_classes)
-        )
-        #self.model = Transformer(in_features, self.NUM_BANDS, self.ELECTRODE_CHANNELS)
+        # self.model = nn.Sequential(
+        #     nn.TransformerEncoder(encoder_layer, n_layer),
+        #     nn.Linear(num_features, charset().num_classes)
+        # )
+        self.model = Transformer(in_features, self.NUM_BANDS, self.ELECTRODE_CHANNELS)
         self.softmax = nn.LogSoftmax(dim=-1)
 
         # Criterion
@@ -208,13 +208,18 @@ class TransformerModel(pl.LightningModule):
             }
         )
 
+    # def forward(self, inputs, seq_len) -> torch.Tensor:
+    #     out = self.tokenizer(inputs)
+    #     out = out.permute(1, 0, 2)
+    #     out = self.positional_encoding(out)
+    #     # out = out + pos_enc
+    #     out = self.model(out)
+    #     out = self.softmax(out)
+    #     out = out.permute(1, 0, 2)
+    #     return out
     def forward(self, inputs, seq_len) -> torch.Tensor:
-        out = self.tokenizer(inputs)
-        pos_enc = self.positional_encoding(out)
-        out = out + pos_enc
-        out = self.model(out)
-        out = self.softmax(out)
-        return out
+        out = self.model(inputs, seq_len)
+        return self.softmax(out.permute(1, 0, 2))
 
     def _step(
         self, phase: str, batch: dict[str, torch.Tensor], *args, **kwargs
