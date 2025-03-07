@@ -279,7 +279,7 @@ class TDSConvEncoder(nn.Module):
     def forward(self, inputs: torch.Tensor) -> torch.Tensor:
         return self.tds_conv_blocks(inputs)  # (T, N, num_features)
 
-class TDSRNNEncoder(nn.Module):
+class TDSGRUEncoder(nn.Module):
     """A time depth-separable convolutional encoder composing a sequence
     of `TDSConv2dBlock` and `TDSFullyConnectedBlock` as per
     "Sequence-to-Sequence Speech Recognition with Time-Depth Separable
@@ -296,24 +296,24 @@ class TDSRNNEncoder(nn.Module):
     def __init__(
         self,
         num_features: int,
-        rnn_hidden_size: int = 128,
-        num_rnn_layers: int = 4,
+        gru_hidden_size: int = 128,
+        num_gru_layers: int = 4,
     ) -> None:
         super().__init__()
 
-        self.rnn_layers = nn.RNN(
+        self.gru_layers = nn.GRU(
             input_size=num_features,
-            hidden_size=rnn_hidden_size,
-            num_layers=num_rnn_layers,
+            hidden_size=gru_hidden_size,
+            num_layers=num_gru_layers,
             batch_first=False,
             bidirectional=True
         )
 
-        self.fc_block = TDSFullyConnectedBlock(rnn_hidden_size*2)
-        self.out_layer = nn.Linear(rnn_hidden_size*2, num_features)
+        self.fc_block = TDSFullyConnectedBlock(gru_hidden_size*2)
+        self.out_layer = nn.Linear(gru_hidden_size*2, num_features)
 
     def forward(self, inputs: torch.Tensor) -> torch.Tensor:
-       x, _ = self.rnn_layers(inputs)
+       x, _ = self.gru_layers(inputs)
        x = self.fc_block(x)
        x = self.out_layer(x)
        return x

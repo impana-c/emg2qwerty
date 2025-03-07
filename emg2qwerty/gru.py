@@ -18,11 +18,11 @@ from emg2qwerty.metrics import CharacterErrorRates
 from emg2qwerty.modules import (
     MultiBandRotationInvariantMLP,
     SpectrogramNorm,
-    TDSRNNEncoder,
+    TDSGRUEncoder,
 )
 from emg2qwerty.transforms import Transform
 
-class RNNCTCModule(pl.LightningModule):
+class GRUCTCModule(pl.LightningModule):
     NUM_BANDS: ClassVar[int] = 2
     ELECTRODE_CHANNELS: ClassVar[int] = 16
 
@@ -54,10 +54,10 @@ class RNNCTCModule(pl.LightningModule):
             ),
             # (T, N, num_features)
             nn.Flatten(start_dim=2),
-            TDSRNNEncoder(
+            TDSGRUEncoder(
                 num_features=num_features,
-                rnn_hidden_size=128,
-                num_rnn_layers=4,
+                gru_hidden_size=128,
+                num_gru_layers=4,
             ),
             # (T, N, num_classes)
             nn.Linear(num_features, charset().num_classes),
