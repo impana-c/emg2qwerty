@@ -19,6 +19,7 @@ from emg2qwerty.modules import (
     MultiBandRotationInvariantMLP,
     SpectrogramNorm,
     TDSGRUCNNEncoder,
+    TDSLSTMCNNEncoder
 )
 from emg2qwerty.transforms import Transform
 
@@ -54,7 +55,7 @@ class GRUCNNCTCModule(pl.LightningModule):
             ),
             # (T, N, num_features)
             nn.Flatten(start_dim=2),
-            TDSGRUCNNEncoder(
+            TDSLSTMCNNEncoder(
                 num_features=num_features,
                 gru_hidden_size=128,
                 num_gru_layers=4,
