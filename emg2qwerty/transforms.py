@@ -243,3 +243,42 @@ class SpecAugment:
 
         # (..., C, freq, T) -> (T, ..., C, freq)
         return x.movedim(-1, 0)
+    
+# class TimeWarp:
+#     def __call__(x, sigma=0.2, knot=4):
+#     """
+#     Applies time warping to a time series.
+
+#     Args:
+#         x (torch.Tensor or numpy.ndarray): Time series data, shape (seq_len, features).
+#         sigma (float): Intensity of warping.
+#         knot (int): Number of knots for the spline interpolation.
+
+#     Returns:
+#         torch.Tensor: Warped time series.
+#     """
+#     if isinstance(x, np.ndarray):
+#         x = torch.from_numpy(x).float()
+    
+#     seq_len = x.shape[0]
+#     device = x.device
+    
+#     # Generate random warp curve
+#     tt = np.linspace(0, 1, knot + 2)
+#     xx = np.random.normal(loc=tt, scale=sigma)
+#     xx = np.clip(xx, 0, 1)
+
+#     # Interpolate to original length
+#     warp_steps = np.linspace(0, 1, seq_len)
+#     warp_curve = np.interp(warp_steps, xx, tt)
+    
+#     # Apply warp to data
+#     warped_x = torch.zeros_like(x)
+    
+#     # Ensure that indexing is within bounds
+#     src_indices = (warp_curve * (seq_len - 1)).round().long()
+    
+#     for i in range(seq_len):
+#         warped_x[i] = x[src_indices[i].clamp(0, seq_len - 1)]
+        
+#     return warped_x
