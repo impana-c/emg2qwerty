@@ -11,6 +11,10 @@ from typing import Any, TypeVar
 import numpy as np
 import torch
 import torchaudio
+from scipy.ndimage import map_coordinates
+from dataclasses import dataclass
+import torchaudio
+import torch.nn.functional as F
 
 
 TTransformIn = TypeVar("TTransformIn")
@@ -218,6 +222,7 @@ class SpecAugment:
     freq_mask_param: int = 0
     iid_freq_masks: bool = True
     mask_value: float = 0.0
+    time_warp_param: int = 5  # Maximum time warping distance
 
     def __post_init__(self) -> None:
         self.time_mask = torchaudio.transforms.TimeMasking(
@@ -227,10 +232,37 @@ class SpecAugment:
             self.freq_mask_param, iid_masks=self.iid_freq_masks
         )
 
+    
+    def time_warp(self, spec: torch.Tensor) -> torch.Tensor:
+        """Applies time warping using PyTorch affine transformation.
+
+        Works on shape (..., C, freq, T).
+        """
+        *batch_dims, C, freq, T = spec.shape
+        if T < 2 or self.time_warp_param <= 0:
+            return spec  # No warping if time is too short
+
+        warped_spec = spec.clone()
+
+        for c in range(C):  # Apply warping per channel
+            center = np.random.randint(self.time_warp_param, T - self.time_warp_param)
+            warp_amount = np.random.randint(-self.time_warp_param, self.time_warp_param)
+
+            # Compute transformation matrix for shifting time
+            theta = torch.tensor([[1, 0, 0], [0, 1, warp_amount / T]])  # Shift along time
+            theta = theta.unsqueeze(0)  # (1, 2, 3) for batched transformation
+
+            # Apply affine transformation to warp time
+            grid = F.affine_grid(theta, warped_spec[..., c, :, :].unsqueeze(0).shape, align_corners=False)
+            warped_spec[..., c, :, :] = F.grid_sample(warped_spec[..., c, :, :].unsqueeze(0), grid, align_corners=False).squeeze(0)
+
+        return warped_spec
+
     def __call__(self, specgram: torch.Tensor) -> torch.Tensor:
         # (T, ..., C, freq) -> (..., C, freq, T)
         x = specgram.movedim(0, -1)
-
+        x = self.time_warp(x)
+        
         # Time masks
         n_t_masks = np.random.randint(self.n_time_masks + 1)
         for _ in range(n_t_masks):
