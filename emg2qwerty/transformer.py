@@ -32,7 +32,7 @@ class Head(nn.Module):
         self.key = nn.Linear(n_embd, head_size, bias=False)
         self.query = nn.Linear(n_embd, head_size, bias=False)
         self.value = nn.Linear(n_embd, head_size, bias=False)
-        #self.register_buffer('tril', torch.tril(torch.ones(block_size, block_size)))
+        self.register_buffer('tril', torch.tril(torch.ones(block_size, block_size)))
 
         self.dropout = nn.Dropout(dropout)
 
@@ -91,7 +91,7 @@ class Block(nn.Module):
         return x
 
 class PositionalEncoding(nn.Module):
-    def __init__(self, d_model, dropout, max_seq_len):
+    def __init__(self, d_model, dropout, max_seq_len=5000):
         """
         d_model: the embedding dimension
         dropout: dropout rate
@@ -171,7 +171,7 @@ class Transformer(nn.Module):
         pos_enc = PositionalEncoding(n_embd, dropout, max_len)
         tok_emb = self.tokenizer(x) # (B,T,C)
         tok_emb = tok_emb.permute(1, 0, 2)
-        x = tok_emb + pos_enc(tok_emb, seq_len) # (B,T,C)
+        x = pos_enc(tok_emb) # (B,T,C)
         x = self.blocks(x) # (B,T,C)
         x = self.ln_f(x) # (B,T,C)
         logits = self.lm_head(x) # (B,T,n_classes)
