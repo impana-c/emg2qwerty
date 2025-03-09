@@ -321,7 +321,7 @@ class TDSConvCTCModule(pl.LightningModule):
         N = len(input_lengths)  # batch_size
 
         emissions = self.forward(inputs)
-        print(emissions.shape)
+        # print(emissions.shape)
         # Shrink input lengths by an amount equivalent to the conv encoder's
         # temporal receptive field to compute output activation lengths for CTCLoss.
         # NOTE: This assumes the encoder doesn't perform any temporal downsampling
