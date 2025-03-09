@@ -42,7 +42,7 @@ class Head(nn.Module):
         q = self.query(x)
 
         attn_weights = k@q.transpose(-2, -1) * k.shape[-1] ** -0.5
-        attn_weights = F.softmax(attn_weights)
+        attn_weights = F.softmax(attn_weights, dim=-1)
         attn_weights = self.dropout(attn_weights)
 
         v = self.value(x)
