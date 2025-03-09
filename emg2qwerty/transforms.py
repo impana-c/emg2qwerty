@@ -11,6 +11,8 @@ from typing import Any, TypeVar
 import numpy as np
 import torch
 import torchaudio
+import torchvision.transforms.functional as F
+from scipy.ndimage import map_coordinates
 
 
 TTransformIn = TypeVar("TTransformIn")
@@ -218,8 +220,17 @@ class SpecAugment:
     freq_mask_param: int = 0
     iid_freq_masks: bool = True
     mask_value: float = 0.0
+    hop_length: int = 16
+    n_freq: int = 201
+    stretch_factor: float=0.8  # Lower stretch limit
+    time_warp_param: int = 5  # Max time warping distance
+
+
 
     def __post_init__(self) -> None:
+        self.time_stretch = torchaudio.transforms.TimeStretch(
+            self.stretch_factor, fixed_rate=True
+        )
         self.time_mask = torchaudio.transforms.TimeMasking(
             self.time_mask_param, iid_masks=self.iid_time_masks
         )
@@ -227,10 +238,49 @@ class SpecAugment:
             self.freq_mask_param, iid_masks=self.iid_freq_masks
         )
 
+    def time_warp(self, spec: torch.Tensor) -> torch.Tensor:
+        """Applies time warping by shifting a random time index forward or backward.
+
+        Works on shape (..., C, freq, T).
+        """
+        # Convert to numpy to apply interpolation
+        spec_np = spec.detach().cpu().numpy()
+
+        *batch_dims, C, freq, T = spec_np.shape
+        if T < 2 or self.time_warp_param <= 0:
+            return spec  # No warping if time is too short
+
+        warped_spec = np.copy(spec_np)  # Copy to avoid modifying the input
+
+        for c in range(C):  # Apply warping per channel
+            center = np.random.randint(self.time_warp_param, T - self.time_warp_param)
+            warp_amount = np.random.randint(-self.time_warp_param, self.time_warp_param)
+
+            # Create meshgrid for interpolation
+            grid_x, grid_y = np.meshgrid(np.arange(freq), np.arange(T), indexing='ij')
+
+            # Apply warping to the time axis
+            grid_y = grid_y.astype(np.float32)
+            grid_y[:, center:] += warp_amount
+            grid_y = np.clip(grid_y, 0, T - 1)  # Prevent out-of-bounds errors
+
+            # Fix: Ensure coords is correctly formatted as (2, freq, T)
+            coords = np.stack([grid_x, grid_y], axis=0)
+
+            # Apply interpolation to warp the spectrogram for this channel
+            warped_spec[..., c, :, :] = map_coordinates(
+                spec_np[..., c, :, :], coords, order=1, mode='nearest'
+            )
+
+        # Convert back to PyTorch tensor
+        return torch.tensor(warped_spec, dtype=spec.dtype, device=spec.device)
+
     def __call__(self, specgram: torch.Tensor) -> torch.Tensor:
         # (T, ..., C, freq) -> (..., C, freq, T)
         x = specgram.movedim(0, -1)
 
+        # stretch_rate = np.random.uniform(self.time_stretch_min, self.time_stretch_max)
+        x = self.time_warp(x)
         # Time masks
         n_t_masks = np.random.randint(self.n_time_masks + 1)
         for _ in range(n_t_masks):
@@ -243,3 +293,42 @@ class SpecAugment:
 
         # (..., C, freq, T) -> (T, ..., C, freq)
         return x.movedim(-1, 0)
+    
+# class TimeWarp:
+#     def __call__(x, sigma=0.2, knot=4):
+#     """
+#     Applies time warping to a time series.
+
+#     Args:
+#         x (torch.Tensor or numpy.ndarray): Time series data, shape (seq_len, features).
+#         sigma (float): Intensity of warping.
+#         knot (int): Number of knots for the spline interpolation.
+
+#     Returns:
+#         torch.Tensor: Warped time series.
+#     """
+#     if isinstance(x, np.ndarray):
+#         x = torch.from_numpy(x).float()
+    
+#     seq_len = x.shape[0]
+#     device = x.device
+    
+#     # Generate random warp curve
+#     tt = np.linspace(0, 1, knot + 2)
+#     xx = np.random.normal(loc=tt, scale=sigma)
+#     xx = np.clip(xx, 0, 1)
+
+#     # Interpolate to original length
+#     warp_steps = np.linspace(0, 1, seq_len)
+#     warp_curve = np.interp(warp_steps, xx, tt)
+    
+#     # Apply warp to data
+#     warped_x = torch.zeros_like(x)
+    
+#     # Ensure that indexing is within bounds
+#     src_indices = (warp_curve * (seq_len - 1)).round().long()
+    
+#     for i in range(seq_len):
+#         warped_x[i] = x[src_indices[i].clamp(0, seq_len - 1)]
+        
+#     return warped_x

@@ -24,6 +24,9 @@ specaug:
   time_mask_param: 25  # Max 200ms per time mask for 125Hz spectrogram
   n_freq_masks: 2
   freq_mask_param: 4
+  hop_length: 16
+  n_freq: 201
+  stretch_factor: 0.8
 
 transforms:
   train:
