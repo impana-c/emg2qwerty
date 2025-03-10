@@ -1,0 +1,322 @@
+2025-03-09 20:02:02.084183: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1741575722.113398 2440992 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1741575722.122244 2440992 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-09 20:02:02.147283: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Global seed set to 1501
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+2025-03-09 20:02:12.539942: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1741575732.560076 2441489 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1741575732.566406 2441489 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-09 20:02:12.586974: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-03-09 20:02:12.663208: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1741575732.683236 2441490 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1741575732.689514 2441490 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-09 20:02:12.710125: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-03-09 20:02:12.767967: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1741575732.788601 2441491 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1741575732.795033 2441491 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-09 20:02:12.816288: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-03-09 20:02:12.818599: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1741575732.839249 2441488 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1741575732.845518 2441488 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-09 20:02:12.866360: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Initializing distributed: GLOBAL_RANK: 1, MEMBER: 2/4
+Initializing distributed: GLOBAL_RANK: 2, MEMBER: 3/4
+Initializing distributed: GLOBAL_RANK: 3, MEMBER: 4/4
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/4
+Missing logger folder: /home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/lightning_logs
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 4 processes
+----------------------------------------------------------------------------------------------------
+
+Missing logger folder: /home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/lightning_logs
+Missing logger folder: /home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/lightning_logs
+Missing logger folder: /home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/lightning_logs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+LOCAL_RANK: 2 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+LOCAL_RANK: 3 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/__init__.py:11: FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
+  if not hasattr(numpy, tp_name):
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/__init__.py:11: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+  if not hasattr(numpy, tp_name):
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/__init__.py:11: FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
+  if not hasattr(numpy, tp_name):
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/__init__.py:11: FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
+  if not hasattr(numpy, tp_name):
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/__init__.py:11: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+  if not hasattr(numpy, tp_name):
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/__init__.py:11: FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
+  if not hasattr(numpy, tp_name):
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/__init__.py:11: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+  if not hasattr(numpy, tp_name):
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/__init__.py:11: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+  if not hasattr(numpy, tp_name):
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/models/self_supervised/amdim/amdim_module.py:34: UnderReviewWarning: The feature generate_power_seq is currently marked under review. The compatibility with other Lightning projects is not guaranteed and API may change at any time. The API and functionality may change without warning in future releases. More details: https://lightning-bolts.readthedocs.io/en/latest/stability.html
+  "lr_options": generate_power_seq(LEARNING_RATE_CIFAR, 11),
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/models/self_supervised/amdim/amdim_module.py:92: UnderReviewWarning: The feature FeatureMapContrastiveTask is currently marked under review. The compatibility with other Lightning projects is not guaranteed and API may change at any time. The API and functionality may change without warning in future releases. More details: https://lightning-bolts.readthedocs.io/en/latest/stability.html
+  contrastive_task: Union[FeatureMapContrastiveTask] = FeatureMapContrastiveTask("01, 02, 11"),
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/losses/self_supervised_learning.py:228: UnderReviewWarning: The feature AmdimNCELoss is currently marked under review. The compatibility with other Lightning projects is not guaranteed and API may change at any time. The API and functionality may change without warning in future releases. More details: https://lightning-bolts.readthedocs.io/en/latest/stability.html
+  self.nce_loss = AmdimNCELoss(tclip)
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/hydra/_internal/instantiate/_instantiate2.py:92: UnderReviewWarning: The feature LinearWarmupCosineAnnealingLR is currently marked under review. The compatibility with other Lightning projects is not guaranteed and API may change at any time. The API and functionality may change without warning in future releases. More details: https://lightning-bolts.readthedocs.io/en/latest/stability.html
+  return _target_(*args, **kwargs)
+
+  | Name     | Type       | Params
+----------------------------------------
+0 | model    | Sequential | 2.4 M 
+1 | ctc_loss | CTCLoss    | 0     
+2 | metrics  | ModuleDict | 0     
+----------------------------------------
+2.4 M     Trainable params
+0         Non-trainable params
+2.4 M     Total params
+9.564     Total estimated model params size (MB)
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pytorch_lightning/trainer/trainer.py:1595: PossibleUserWarning: The number of training batches (30) is smaller than the logging interval Trainer(log_every_n_steps=50). Set a lower value for log_every_n_steps if you want to see logs for the training epoch.
+  rank_zero_warn(
+[rank1]:[W reducer.cpp:1389] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+[rank0]:[W reducer.cpp:1389] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+[rank2]:[W reducer.cpp:1389] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+[rank3]:[W reducer.cpp:1389] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+Epoch 0, global step 30: 'val/CER' reached 119.45060 (best 119.45060), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=0-step=30.ckpt' as top 1
+Epoch 1, global step 60: 'val/CER' reached 100.00000 (best 100.00000), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=1-step=60.ckpt' as top 1
+Epoch 2, global step 90: 'val/CER' was not in top 1
+Epoch 3, global step 120: 'val/CER' was not in top 1
+Epoch 4, global step 150: 'val/CER' was not in top 1
+Epoch 5, global step 180: 'val/CER' was not in top 1
+Epoch 6, global step 210: 'val/CER' was not in top 1
+Epoch 7, global step 240: 'val/CER' was not in top 1
+Epoch 8, global step 270: 'val/CER' was not in top 1
+Epoch 9, global step 300: 'val/CER' was not in top 1
+Epoch 10, global step 330: 'val/CER' was not in top 1
+Epoch 11, global step 360: 'val/CER' was not in top 1
+Epoch 12, global step 390: 'val/CER' was not in top 1
+Epoch 13, global step 420: 'val/CER' was not in top 1
+Epoch 14, global step 450: 'val/CER' was not in top 1
+Epoch 15, global step 480: 'val/CER' was not in top 1
+Epoch 16, global step 510: 'val/CER' was not in top 1
+Epoch 17, global step 540: 'val/CER' was not in top 1
+Epoch 18, global step 570: 'val/CER' was not in top 1
+Epoch 19, global step 600: 'val/CER' was not in top 1
+Epoch 20, global step 630: 'val/CER' was not in top 1
+Epoch 21, global step 660: 'val/CER' was not in top 1
+Epoch 22, global step 690: 'val/CER' reached 99.93354 (best 99.93354), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=22-step=690.ckpt' as top 1
+Epoch 23, global step 720: 'val/CER' reached 99.40186 (best 99.40186), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=23-step=720.ckpt' as top 1
+Epoch 24, global step 750: 'val/CER' reached 94.83828 (best 94.83828), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=24-step=750.ckpt' as top 1
+Epoch 25, global step 780: 'val/CER' reached 91.78113 (best 91.78113), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=25-step=780.ckpt' as top 1
+Epoch 26, global step 810: 'val/CER' reached 86.61941 (best 86.61941), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=26-step=810.ckpt' as top 1
+Epoch 27, global step 840: 'val/CER' reached 80.48294 (best 80.48294), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=27-step=840.ckpt' as top 1
+Epoch 28, global step 870: 'val/CER' reached 65.48516 (best 65.48516), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=28-step=870.ckpt' as top 1
+Epoch 29, global step 900: 'val/CER' reached 63.77935 (best 63.77935), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=29-step=900.ckpt' as top 1
+Epoch 30, global step 930: 'val/CER' reached 60.61143 (best 60.61143), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=30-step=930.ckpt' as top 1
+Epoch 31, global step 960: 'val/CER' reached 52.54763 (best 52.54763), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=31-step=960.ckpt' as top 1
+Epoch 32, global step 990: 'val/CER' reached 48.84803 (best 48.84803), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=32-step=990.ckpt' as top 1
+Epoch 33, global step 1020: 'val/CER' reached 48.64865 (best 48.64865), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=33-step=1020.ckpt' as top 1
+Epoch 34, global step 1050: 'val/CER' was not in top 1
+Epoch 35, global step 1080: 'val/CER' reached 43.84138 (best 43.84138), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=35-step=1080.ckpt' as top 1
+Epoch 36, global step 1110: 'val/CER' reached 43.64200 (best 43.64200), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=36-step=1110.ckpt' as top 1
+Epoch 37, global step 1140: 'val/CER' reached 42.64510 (best 42.64510), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=37-step=1140.ckpt' as top 1
+Epoch 38, global step 1170: 'val/CER' was not in top 1
+Epoch 39, global step 1200: 'val/CER' reached 39.03411 (best 39.03411), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=39-step=1200.ckpt' as top 1
+Epoch 40, global step 1230: 'val/CER' was not in top 1
+Epoch 41, global step 1260: 'val/CER' reached 38.87904 (best 38.87904), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=41-step=1260.ckpt' as top 1
+Epoch 42, global step 1290: 'val/CER' was not in top 1
+Epoch 43, global step 1320: 'val/CER' reached 35.82189 (best 35.82189), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=43-step=1320.ckpt' as top 1
+Epoch 44, global step 1350: 'val/CER' was not in top 1
+Epoch 45, global step 1380: 'val/CER' reached 34.31546 (best 34.31546), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=45-step=1380.ckpt' as top 1
+Epoch 46, global step 1410: 'val/CER' reached 32.43243 (best 32.43243), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=46-step=1410.ckpt' as top 1
+Epoch 47, global step 1440: 'val/CER' was not in top 1
+Epoch 48, global step 1470: 'val/CER' was not in top 1
+Epoch 49, global step 1500: 'val/CER' was not in top 1
+Epoch 50, global step 1530: 'val/CER' reached 31.63491 (best 31.63491), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=50-step=1530.ckpt' as top 1
+Epoch 51, global step 1560: 'val/CER' reached 30.81524 (best 30.81524), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=51-step=1560.ckpt' as top 1
+Epoch 52, global step 1590: 'val/CER' reached 30.03988 (best 30.03988), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=52-step=1590.ckpt' as top 1
+Epoch 53, global step 1620: 'val/CER' was not in top 1
+Epoch 54, global step 1650: 'val/CER' was not in top 1
+Epoch 55, global step 1680: 'val/CER' reached 28.64422 (best 28.64422), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=55-step=1680.ckpt' as top 1
+Epoch 56, global step 1710: 'val/CER' was not in top 1
+Epoch 57, global step 1740: 'val/CER' was not in top 1
+Epoch 58, global step 1770: 'val/CER' reached 28.42269 (best 28.42269), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=58-step=1770.ckpt' as top 1
+Epoch 59, global step 1800: 'val/CER' was not in top 1
+Epoch 60, global step 1830: 'val/CER' reached 28.26761 (best 28.26761), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=60-step=1830.ckpt' as top 1
+Epoch 61, global step 1860: 'val/CER' was not in top 1
+Epoch 62, global step 1890: 'val/CER' reached 27.58086 (best 27.58086), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=62-step=1890.ckpt' as top 1
+Epoch 63, global step 1920: 'val/CER' reached 26.80549 (best 26.80549), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=63-step=1920.ckpt' as top 1
+Epoch 64, global step 1950: 'val/CER' was not in top 1
+Epoch 65, global step 1980: 'val/CER' reached 26.29597 (best 26.29597), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=65-step=1980.ckpt' as top 1
+Epoch 66, global step 2010: 'val/CER' was not in top 1
+Epoch 67, global step 2040: 'val/CER' reached 25.09969 (best 25.09969), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=67-step=2040.ckpt' as top 1
+Epoch 68, global step 2070: 'val/CER' was not in top 1
+Epoch 69, global step 2100: 'val/CER' reached 24.61232 (best 24.61232), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=69-step=2100.ckpt' as top 1
+Epoch 70, global step 2130: 'val/CER' was not in top 1
+Epoch 71, global step 2160: 'val/CER' was not in top 1
+Epoch 72, global step 2190: 'val/CER' was not in top 1
+Epoch 73, global step 2220: 'val/CER' reached 24.32432 (best 24.32432), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=73-step=2220.ckpt' as top 1
+Epoch 74, global step 2250: 'val/CER' reached 23.92557 (best 23.92557), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=74-step=2250.ckpt' as top 1
+Epoch 75, global step 2280: 'val/CER' was not in top 1
+Epoch 76, global step 2310: 'val/CER' was not in top 1
+Epoch 77, global step 2340: 'val/CER' reached 23.26097 (best 23.26097), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=77-step=2340.ckpt' as top 1
+Epoch 78, global step 2370: 'val/CER' was not in top 1
+Epoch 79, global step 2400: 'val/CER' was not in top 1
+Epoch 80, global step 2430: 'val/CER' was not in top 1
+Epoch 81, global step 2460: 'val/CER' reached 22.64067 (best 22.64067), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=81-step=2460.ckpt' as top 1
+Epoch 82, global step 2490: 'val/CER' was not in top 1
+Epoch 83, global step 2520: 'val/CER' was not in top 1
+Epoch 84, global step 2550: 'val/CER' was not in top 1
+Epoch 85, global step 2580: 'val/CER' was not in top 1
+Epoch 86, global step 2610: 'val/CER' was not in top 1
+Epoch 87, global step 2640: 'val/CER' reached 22.02038 (best 22.02038), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=87-step=2640.ckpt' as top 1
+Epoch 88, global step 2670: 'val/CER' reached 21.88746 (best 21.88746), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=88-step=2670.ckpt' as top 1
+Epoch 89, global step 2700: 'val/CER' reached 21.48870 (best 21.48870), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=89-step=2700.ckpt' as top 1
+Epoch 90, global step 2730: 'val/CER' was not in top 1
+Epoch 91, global step 2760: 'val/CER' was not in top 1
+Epoch 92, global step 2790: 'val/CER' was not in top 1
+Epoch 93, global step 2820: 'val/CER' reached 21.46655 (best 21.46655), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=93-step=2820.ckpt' as top 1
+Epoch 94, global step 2850: 'val/CER' was not in top 1
+Epoch 95, global step 2880: 'val/CER' was not in top 1
+Epoch 96, global step 2910: 'val/CER' was not in top 1
+Epoch 97, global step 2940: 'val/CER' was not in top 1
+Epoch 98, global step 2970: 'val/CER' was not in top 1
+Epoch 99, global step 3000: 'val/CER' reached 21.00133 (best 21.00133), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=99-step=3000.ckpt' as top 1
+Epoch 100, global step 3030: 'val/CER' reached 20.86841 (best 20.86841), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=100-step=3030.ckpt' as top 1
+Epoch 101, global step 3060: 'val/CER' was not in top 1
+Epoch 102, global step 3090: 'val/CER' was not in top 1
+Epoch 103, global step 3120: 'val/CER' was not in top 1
+Epoch 104, global step 3150: 'val/CER' reached 20.80195 (best 20.80195), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=104-step=3150.ckpt' as top 1
+Epoch 105, global step 3180: 'val/CER' reached 19.96012 (best 19.96012), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=105-step=3180.ckpt' as top 1
+Epoch 106, global step 3210: 'val/CER' was not in top 1
+Epoch 107, global step 3240: 'val/CER' was not in top 1
+Epoch 108, global step 3270: 'val/CER' was not in top 1
+Epoch 109, global step 3300: 'val/CER' was not in top 1
+Epoch 110, global step 3330: 'val/CER' reached 19.89366 (best 19.89366), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=110-step=3330.ckpt' as top 1
+Epoch 111, global step 3360: 'val/CER' was not in top 1
+Epoch 112, global step 3390: 'val/CER' reached 19.51706 (best 19.51706), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=112-step=3390.ckpt' as top 1
+Epoch 113, global step 3420: 'val/CER' was not in top 1
+Epoch 114, global step 3450: 'val/CER' was not in top 1
+Epoch 115, global step 3480: 'val/CER' reached 19.31768 (best 19.31768), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=115-step=3480.ckpt' as top 1
+Epoch 116, global step 3510: 'val/CER' was not in top 1
+Epoch 117, global step 3540: 'val/CER' was not in top 1
+Epoch 118, global step 3570: 'val/CER' was not in top 1
+Epoch 119, global step 3600: 'val/CER' was not in top 1
+Epoch 120, global step 3630: 'val/CER' reached 19.11830 (best 19.11830), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=120-step=3630.ckpt' as top 1
+Epoch 121, global step 3660: 'val/CER' was not in top 1
+Epoch 122, global step 3690: 'val/CER' was not in top 1
+Epoch 123, global step 3720: 'val/CER' was not in top 1
+Epoch 124, global step 3750: 'val/CER' was not in top 1
+Epoch 125, global step 3780: 'val/CER' was not in top 1
+Epoch 126, global step 3810: 'val/CER' was not in top 1
+Epoch 127, global step 3840: 'val/CER' was not in top 1
+Epoch 128, global step 3870: 'val/CER' was not in top 1
+Epoch 129, global step 3900: 'val/CER' reached 18.65308 (best 18.65308), saving model to '/home/bkwan27/emg2qwerty/logs/2025-03-09/20-01-57/job0_trainer.devices=4,user=single_user/checkpoints/epoch=129-step=3900.ckpt' as top 1
+Epoch 130, global step 3930: 'val/CER' was not in top 1
+Epoch 131, global step 3960: 'val/CER' was not in top 1
+Epoch 132, global step 3990: 'val/CER' was not in top 1
+Epoch 133, global step 4020: 'val/CER' was not in top 1
+Epoch 134, global step 4050: 'val/CER' was not in top 1
+Epoch 135, global step 4080: 'val/CER' was not in top 1
+Epoch 136, global step 4110: 'val/CER' was not in top 1
+Epoch 137, global step 4140: 'val/CER' was not in top 1
+Epoch 138, global step 4170: 'val/CER' was not in top 1
+Epoch 139, global step 4200: 'val/CER' was not in top 1
+Epoch 140, global step 4230: 'val/CER' was not in top 1
+Epoch 141, global step 4260: 'val/CER' was not in top 1
+Epoch 142, global step 4290: 'val/CER' was not in top 1
+Epoch 143, global step 4320: 'val/CER' was not in top 1
+Epoch 144, global step 4350: 'val/CER' was not in top 1
+Epoch 145, global step 4380: 'val/CER' was not in top 1
+Epoch 146, global step 4410: 'val/CER' was not in top 1
+Epoch 147, global step 4440: 'val/CER' was not in top 1
+Epoch 148, global step 4470: 'val/CER' was not in top 1
+Epoch 149, global step 4500: 'val/CER' was not in top 1
+`Trainer.fit` stopped: `max_epochs=150` reached.
+2025-03-09 20:39:22.361286: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Att2025-03-09 20:39:22.361309: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+empting to register factory for plugin cuFFT when one has already been registered
+2025-03-09 20:39:22.361396: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1741577962.381636 2498434 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1741577962.381855 2498435 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1741577962.382031 2498433 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1741577962.388242 2498434 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-09 20:39:22.389707: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+E0000 00:00:1741577962.390869 2498435 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+E0000 00:00:1741577962.391052 2498433 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-09 20:39:22.410000: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1741577962.412023 2498432 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2025-03-09 20:39:22.412565: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-03-09 20:39:22.412937: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+E0000 00:00:1741577962.419173 2498432 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-09 20:39:22.440541: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Initializing distributed: GLOBAL_RANK: 2, MEMBER: 3/4
+Initializing distributed: GLOBAL_RANK: 1, MEMBER: 2/4
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/4
+Initializing distributed: GLOBAL_RANK: 3, MEMBER: 4/4
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 4 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+LOCAL_RANK: 3 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+LOCAL_RANK: 2 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:315: PossibleUserWarning: Using `DistributedSampler` with the dataloaders. During `trainer.validate()`, it is recommended to use `Trainer(devices=1, num_nodes=1)` to ensure each sample/batch gets evaluated exactly once. Otherwise, multi-device settings use `DistributedSampler` that replicates some samples to make sure all devices have same batch size in case of uneven inputs.
+  rank_zero_warn(
+2025-03-09 20:39:46.558796: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1741577986.579273 2502873 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2025-03-09 20:39:46.581022: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+E0000 00:00:1741577986.585802 2502873 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-09 20:39:46.601526: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1741577986.602929 2502871 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2025-03-09 20:39:46.606914: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+E0000 00:00:1741577986.610885 2502871 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-09 20:39:46.620123: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1741577986.622028 2502870 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1741577986.629118 2502870 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-09 20:39:46.632815: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1741577986.640433 2502872 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1741577986.646770 2502872 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-09 20:39:46.650120: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-03-09 20:39:46.667637: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Initializing distributed: GLOBAL_RANK: 1, MEMBER: 2/4
+Initializing distributed: GLOBAL_RANK: 3, MEMBER: 4/4
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/4
+Initializing distributed: GLOBAL_RANK: 2, MEMBER: 3/4
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 4 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 3 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+LOCAL_RANK: 2 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:315: PossibleUserWarning: Using `DistributedSampler` with the dataloaders. During `trainer.test()`, it is recommended to use `Trainer(devices=1, num_nodes=1)` to ensure each sample/batch gets evaluated exactly once. Otherwise, multi-device settings use `DistributedSampler` that replicates some samples to make sure all devices have same batch size in case of uneven inputs.
+  rank_zero_warn(
