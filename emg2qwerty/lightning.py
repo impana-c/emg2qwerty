@@ -27,8 +27,22 @@ from emg2qwerty.modules import (
     TDSConvEncoder,
 )
 from emg2qwerty.transforms import Transform
-from emg2qwerty.transformer import Transformer
+from emg2qwerty.transformer import Transformer, PositionalEncoding
 
+batch_size = 64 # how many independent sequences will we process in parallel?
+block_size = 256 # what is the maximum context length for predictions?
+max_iters = 5000
+eval_interval = 500
+learning_rate = 3e-4
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+eval_iters = 200
+n_embd = 384
+n_head = 6
+n_layer = 6
+dropout = 0.2
+#seq_len = # is this variable
+num_classes = charset().num_classes
+mlp_features = [384, n_embd//2]
 
 class WindowedEMGDataModule(pl.LightningDataModule):
     def __init__(
@@ -153,12 +167,31 @@ class TransformerModel(pl.LightningModule):
     ) -> None:
         super().__init__()
         self.save_hyperparameters()
-
+        # try pretrain GPT-2 and then freeze tokenizer and last linear layer
         num_features = self.NUM_BANDS * mlp_features[-1]
-
-        # Model
+        encoder_layer = nn.TransformerEncoderLayer(num_features, n_head, 4*num_features, dropout, batch_first=True)
         # inputs: (T, N, bands=2, electrode_channels=16, freq)
+        # add contextualized transformer at the start and then use TDSConv
+        self.tokenizer = nn.Sequential(
+            # (T, N, bands=2, C=16, freq)
+            SpectrogramNorm(channels=self.NUM_BANDS * self.ELECTRODE_CHANNELS),
+            # (T, N, bands=2, mlp_features[-1])
+            MultiBandRotationInvariantMLP(
+                in_features=in_features,
+                mlp_features=mlp_features,
+                num_bands=self.NUM_BANDS,
+            ),
+            nn.Flatten(start_dim=2)
+            # nn.Linear(num_features, num_features)
+        )
+        self.positional_encoding = PositionalEncoding(num_features, dropout)
+        # Model
+        # self.model = nn.Sequential(
+        #     nn.TransformerEncoder(encoder_layer, n_layer),
+        #     nn.Linear(num_features, charset().num_classes)
+        # )
         self.model = Transformer(in_features, self.NUM_BANDS, self.ELECTRODE_CHANNELS)
+        self.softmax = nn.LogSoftmax(dim=-1)
 
         # Criterion
         self.ctc_loss = nn.CTCLoss(blank=charset().null_class)
@@ -175,8 +208,18 @@ class TransformerModel(pl.LightningModule):
             }
         )
 
+    # def forward(self, inputs, seq_len) -> torch.Tensor:
+    #     out = self.tokenizer(inputs)
+    #     out = out.permute(1, 0, 2)
+    #     out = self.positional_encoding(out)
+    #     # out = out + pos_enc
+    #     out = self.model(out)
+    #     out = self.softmax(out)
+    #     out = out.permute(1, 0, 2)
+    #     return out
     def forward(self, inputs, seq_len) -> torch.Tensor:
-        return self.model(inputs, seq_len)
+        out = self.model(inputs, seq_len)
+        return self.softmax(out.permute(1, 0, 2))
 
     def _step(
         self, phase: str, batch: dict[str, torch.Tensor], *args, **kwargs
@@ -188,13 +231,14 @@ class TransformerModel(pl.LightningModule):
         N = len(input_lengths)  # batch_size
 
         emissions = self.forward(inputs, input_lengths)
-        emissions = emissions.permute(1, 0, 2)
+        # emissions = emissions.permute(1, 0, 2)
         # Shrink input lengths by an amount equivalent to the conv encoder's
         # temporal receptive field to compute output activation lengths for CTCLoss.
         # NOTE: This assumes the encoder doesn't perform any temporal downsampling
         # such as by striding.
-        T_diff = inputs.shape[0] - emissions.shape[0]
-        emission_lengths = input_lengths - T_diff
+        # T_diff = inputs.shape[0] - emissions.shape[0]
+        # emission_lengths = input_lengths - T_diff
+        emission_lengths = input_lengths
         
         loss = self.ctc_loss(
             log_probs=emissions,  # (T, N, num_classes)
@@ -283,11 +327,12 @@ class TDSConvCTCModule(pl.LightningModule):
             ),
             # (T, N, num_features)
             nn.Flatten(start_dim=2),
-            TDSConvEncoder(
-                num_features=num_features,
-                block_channels=block_channels,
-                kernel_width=kernel_width,
-            ),
+            # TDSConvEncoder(
+            #     num_features=num_features,
+            #     block_channels=block_channels,
+            #     kernel_width=kernel_width,
+            # ),
+            TransformerModel(num_features, self.NUM_BANDS, self.ELECTRODE_CHANNELS),
             # (T, N, num_classes)
             nn.Linear(num_features, charset().num_classes),
             nn.LogSoftmax(dim=-1),
@@ -321,7 +366,7 @@ class TDSConvCTCModule(pl.LightningModule):
         N = len(input_lengths)  # batch_size
 
         emissions = self.forward(inputs)
-        # print(emissions.shape)
+        print(emissions.shape)
         # Shrink input lengths by an amount equivalent to the conv encoder's
         # temporal receptive field to compute output activation lengths for CTCLoss.
         # NOTE: This assumes the encoder doesn't perform any temporal downsampling
