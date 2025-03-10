@@ -197,7 +197,7 @@ class GaussianNoiseInjection:
     def __call__(self, tensor: torch.Tensor) -> torch.Tensor:
         std = torch.FloatTensor(1).uniform_(0.005, 0.02)  # Random noise std per sample
         noise = torch.randn_like(tensor)*std + self.mean
-        x = x + noise
+        x = tensor + noise
         return x
     
 class Scaling:
