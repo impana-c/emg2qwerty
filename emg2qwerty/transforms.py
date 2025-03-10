@@ -15,6 +15,7 @@ from scipy.ndimage import map_coordinates
 from dataclasses import dataclass
 import torchaudio
 import torch.nn.functional as F
+import random
 
 
 TTransformIn = TypeVar("TTransformIn")
@@ -223,6 +224,8 @@ class SpecAugment:
     iid_freq_masks: bool = True
     mask_value: float = 0.0
     time_warp_param: int = 5  # Maximum time warping distance
+    mean: float = 0
+    std: float = 0
 
     def __post_init__(self) -> None:
         self.time_mask = torchaudio.transforms.TimeMasking(
@@ -261,8 +264,16 @@ class SpecAugment:
     def __call__(self, specgram: torch.Tensor) -> torch.Tensor:
         # (T, ..., C, freq) -> (..., C, freq, T)
         x = specgram.movedim(0, -1)
-        x = self.time_warp(x)
+
+        # Time Warp
+        if random.random() < 0.5:
+            x = self.time_warp(x)
         
+        # Add Gaussian Noise
+        std = torch.FloatTensor(1).uniform_(0.005, 0.02)  # Random noise std per sample
+        noise = torch.randn_like(x)*std + self.mean
+        x = x + noise
+
         # Time masks
         n_t_masks = np.random.randint(self.n_time_masks + 1)
         for _ in range(n_t_masks):
