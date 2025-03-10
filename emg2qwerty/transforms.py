@@ -124,6 +124,88 @@ class RandomBandRotation:
         offset = np.random.choice(self.offsets) if len(self.offsets) > 0 else 0
         return tensor.roll(offset, dims=self.channel_dim)
 
+@dataclass
+class TimeWarp:
+    """
+    """
+
+    time_warp_param: int = 5  # Maximum time warping distance
+
+    def __call__(self, spec: torch.Tensor) -> torch.Tensor:
+        """
+        Applies time warping using PyTorch affine transformation.
+
+        Works on shape (T, ..., C), where:
+        - T is the time dimension
+        - ... represents batch dimensions (if present)
+        - C is the channel dimension
+        """
+        T, *batch_dims, C = spec.shape  # Unpack dimensions
+
+        if T < 2 or self.time_warp_param <= 0:
+            return spec  # No warping if not enough time steps
+
+        warped_spec = spec.clone()
+
+        # Choose a random center point in time
+        center = np.random.randint(self.time_warp_param, T - self.time_warp_param)
+        warp_amount = np.random.randint(-self.time_warp_param, self.time_warp_param)
+
+        # Create an affine transformation matrix (for warping along T)
+        theta = torch.tensor([[[1, 0, warp_amount / T], [0, 1, 0]]], dtype=torch.float32)  # Shape (1, 2, 3)
+
+        # Expand theta to match batch size
+        batch_size = int(np.prod(batch_dims)) if batch_dims else 1  # Compute batch size if present
+        theta = theta.expand(batch_size, -1, -1)  # Shape (batch_size, 2, 3)
+
+        # Reshape input for affine transformation
+        # We add a spatial dimension so `grid_sample` works correctly
+        warped_spec_t = warped_spec.permute(1, 2, 0).unsqueeze(1)  # (Batch, 1, C, T)
+
+        # Generate the affine grid
+        grid = F.affine_grid(theta, warped_spec_t.shape, align_corners=False)
+
+        # Apply transformation
+        warped_spec_t = F.grid_sample(warped_spec_t, grid, align_corners=False)
+
+        # Remove the dummy spatial dimension and permute back
+        warped_spec = warped_spec_t.squeeze(1).permute(2, 0, 1)  # Back to (T, ..., C)
+
+        return warped_spec
+
+
+@dataclass
+class GaussianNoiseInjection:
+    """Applies band rotation augmentation by shifting the electrode channels
+    by an offset value randomly chosen from ``offsets``. By default, assumes
+    the input is of shape (..., C).
+
+    NOTE: If the input is 3D with batch dim (TNC), then this transform
+    applies band rotation for all items in the batch with the same offset.
+    To apply different rotations each batch item, use the ``ForEach`` wrapper.
+
+    Args:
+        offsets (list): List of integers denoting the offsets by which the
+            electrodes are allowed to be shift. A random offset from this
+            list is chosen for each application of the transform.
+        channel_dim (int): The electrode channel dimension. (default: -1)
+    """
+
+    mean: float = 0
+    std: float = 0
+
+    def __call__(self, tensor: torch.Tensor) -> torch.Tensor:
+        std = torch.FloatTensor(1).uniform_(0.005, 0.02)  # Random noise std per sample
+        noise = torch.randn_like(tensor)*std + self.mean
+        x = x + noise
+        return x
+    
+class Scaling:
+    def __call__(self, tensor: torch.Tensor) -> torch.Tensor:
+        scale_factor = torch.tensor(0.8 + 0.4 * torch.rand(1))  # Random scale (0.8x to 1.2x)
+        x = tensor * scale_factor
+        return x
+
 
 @dataclass
 class TemporalAlignmentJitter:
@@ -223,9 +305,6 @@ class SpecAugment:
     freq_mask_param: int = 0
     iid_freq_masks: bool = True
     mask_value: float = 0.0
-    time_warp_param: int = 5  # Maximum time warping distance
-    mean: float = 0
-    std: float = 0
 
     def __post_init__(self) -> None:
         self.time_mask = torchaudio.transforms.TimeMasking(
@@ -235,44 +314,13 @@ class SpecAugment:
             self.freq_mask_param, iid_masks=self.iid_freq_masks
         )
 
-    
-    def time_warp(self, spec: torch.Tensor) -> torch.Tensor:
-        """Applies time warping using PyTorch affine transformation.
-
-        Works on shape (..., C, freq, T).
-        """
-        *batch_dims, C, freq, T = spec.shape
-        if T < 2 or self.time_warp_param <= 0:
-            return spec  # No warping if time is too short
-
-        warped_spec = spec.clone()
-
-        for c in range(C):  # Apply warping per channel
-            center = np.random.randint(self.time_warp_param, T - self.time_warp_param)
-            warp_amount = np.random.randint(-self.time_warp_param, self.time_warp_param)
-
-            # Compute transformation matrix for shifting time
-            theta = torch.tensor([[1, 0, 0], [0, 1, warp_amount / T]])  # Shift along time
-            theta = theta.unsqueeze(0)  # (1, 2, 3) for batched transformation
-
-            # Apply affine transformation to warp time
-            grid = F.affine_grid(theta, warped_spec[..., c, :, :].unsqueeze(0).shape, align_corners=False)
-            warped_spec[..., c, :, :] = F.grid_sample(warped_spec[..., c, :, :].unsqueeze(0), grid, align_corners=False).squeeze(0)
-
-        return warped_spec
-
     def __call__(self, specgram: torch.Tensor) -> torch.Tensor:
         # (T, ..., C, freq) -> (..., C, freq, T)
         x = specgram.movedim(0, -1)
 
-        # Time Warp
-        if random.random() < 0.5:
-            x = self.time_warp(x)
-        
-        # Add Gaussian Noise
-        std = torch.FloatTensor(1).uniform_(0.005, 0.02)  # Random noise std per sample
-        noise = torch.randn_like(x)*std + self.mean
-        x = x + noise
+        # Scaling
+        # scale_factor = torch.tensor(0.8 + 0.4 * torch.rand(1))  # Random scale (0.8x to 1.2x)
+        # x = x * scale_factor
 
         # Time masks
         n_t_masks = np.random.randint(self.n_time_masks + 1)
