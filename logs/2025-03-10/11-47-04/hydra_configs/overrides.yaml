@@ -1,5 +1,0 @@
-- user=single_user
-- checkpoint=Your_Path_to_Checkpoint
-- train=False
-- trainer.accelerator=gpu
-- decoder=ctc_greedy

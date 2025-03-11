@@ -1,0 +1,140 @@
+submitit INFO (2025-03-11 10:57:10,216) - Starting with JobEnvironment(job_id=3577, hostname=temescal, local_rank=0(1), node=0(1), global_rank=0(1))
+submitit INFO (2025-03-11 10:57:10,217) - Loading pickle: /home/bkwan27/emg2qwerty/logs/2025-03-11/10-57-09/submitit_logs/3577/3577_submitted.pkl
+[2025-03-11 10:57:15,345][__main__][INFO] - 
+Config:
+user: single_user
+dataset:
+  train:
+  - user: 89335547
+    session: 2021-06-03-1622765527-keystrokes-dca-study@1-0efbe614-9ae6-4131-9192-4398359b4f5f
+  - user: 89335547
+    session: 2021-06-02-1622681518-keystrokes-dca-study@1-0efbe614-9ae6-4131-9192-4398359b4f5f
+  - user: 89335547
+    session: 2021-06-04-1622863166-keystrokes-dca-study@1-0efbe614-9ae6-4131-9192-4398359b4f5f
+  - user: 89335547
+    session: 2021-07-22-1627003020-keystrokes-dca-study@1-0efbe614-9ae6-4131-9192-4398359b4f5f
+  - user: 89335547
+    session: 2021-07-21-1626916256-keystrokes-dca-study@1-0efbe614-9ae6-4131-9192-4398359b4f5f
+  - user: 89335547
+    session: 2021-07-22-1627004019-keystrokes-dca-study@1-0efbe614-9ae6-4131-9192-4398359b4f5f
+  - user: 89335547
+    session: 2021-06-05-1622885888-keystrokes-dca-study@1-0efbe614-9ae6-4131-9192-4398359b4f5f
+  - user: 89335547
+    session: 2021-06-02-1622679967-keystrokes-dca-study@1-0efbe614-9ae6-4131-9192-4398359b4f5f
+  - user: 89335547
+    session: 2021-06-03-1622764398-keystrokes-dca-study@1-0efbe614-9ae6-4131-9192-4398359b4f5f
+  - user: 89335547
+    session: 2021-07-21-1626917264-keystrokes-dca-study@1-0efbe614-9ae6-4131-9192-4398359b4f5f
+  - user: 89335547
+    session: 2021-06-05-1622889105-keystrokes-dca-study@1-0efbe614-9ae6-4131-9192-4398359b4f5f
+  - user: 89335547
+    session: 2021-06-03-1622766673-keystrokes-dca-study@1-0efbe614-9ae6-4131-9192-4398359b4f5f
+  - user: 89335547
+    session: 2021-06-04-1622861066-keystrokes-dca-study@1-0efbe614-9ae6-4131-9192-4398359b4f5f
+  - user: 89335547
+    session: 2021-07-22-1627001995-keystrokes-dca-study@1-0efbe614-9ae6-4131-9192-4398359b4f5f
+  - user: 89335547
+    session: 2021-06-05-1622884635-keystrokes-dca-study@1-0efbe614-9ae6-4131-9192-4398359b4f5f
+  - user: 89335547
+    session: 2021-07-21-1626915176-keystrokes-dca-study@1-0efbe614-9ae6-4131-9192-4398359b4f5f
+  val:
+  - user: 89335547
+    session: 2021-06-04-1622862148-keystrokes-dca-study@1-0efbe614-9ae6-4131-9192-4398359b4f5f
+  test:
+  - user: 89335547
+    session: 2021-06-02-1622682789-keystrokes-dca-study@1-0efbe614-9ae6-4131-9192-4398359b4f5f
+  root: ${hydra:runtime.cwd}/data
+to_tensor:
+  _target_: emg2qwerty.transforms.ToTensor
+  fields:
+  - emg_left
+  - emg_right
+band_rotation:
+  _target_: emg2qwerty.transforms.ForEach
+  transform:
+    _target_: emg2qwerty.transforms.RandomBandRotation
+    offsets:
+    - -1
+    - 0
+    - 1
+temporal_jitter:
+  _target_: emg2qwerty.transforms.TemporalAlignmentJitter
+  max_offset: 120
+logspec:
+  _target_: emg2qwerty.transforms.LogSpectrogram
+  n_fft: 64
+  hop_length: 8
+specaug:
+  _target_: emg2qwerty.transforms.SpecAugment
+  n_time_masks: 3
+  time_mask_param: 25
+  n_freq_masks: 2
+  freq_mask_param: 4
+  mean: 0
+  std: 0.05
+transforms:
+  train:
+  - ${to_tensor}
+  - ${band_rotation}
+  - ${temporal_jitter}
+  - ${logspec}
+  - ${specaug}
+  val:
+  - ${to_tensor}
+  - ${logspec}
+  test: ${transforms.val}
+module:
+  _target_: emg2qwerty.lightning.TDSConvCTCModule
+  in_features: 528
+  mlp_features:
+  - 384
+  block_channels:
+  - 24
+  - 24
+  - 24
+  - 24
+  kernel_width: 32
+datamodule:
+  _target_: emg2qwerty.lightning.WindowedEMGDataModule
+  window_length: 8000
+  padding:
+  - 1800
+  - 200
+optimizer:
+  _target_: torch.optim.Adam
+  lr: 0.001
+lr_scheduler:
+  scheduler:
+    _target_: pl_bolts.optimizers.lr_scheduler.LinearWarmupCosineAnnealingLR
+    warmup_epochs: 10
+    max_epochs: ${trainer.max_epochs}
+    warmup_start_lr: 1.0e-08
+    eta_min: 1.0e-06
+  interval: epoch
+decoder:
+  _target_: emg2qwerty.decoder.CTCGreedyDecoder
+seed: 1501
+batch_size: 32
+num_workers: 4
+train: true
+checkpoint: null
+monitor_metric: val/CER
+monitor_mode: min
+trainer:
+  accelerator: gpu
+  devices: 3
+  num_nodes: 1
+  max_epochs: 30
+  default_root_dir: ${hydra:runtime.output_dir}
+callbacks:
+- _target_: pytorch_lightning.callbacks.LearningRateMonitor
+- _target_: pytorch_lightning.callbacks.ModelCheckpoint
+  dirpath: ${hydra:runtime.output_dir}/checkpoints
+  monitor: ${monitor_metric}
+  mode: ${monitor_mode}
+  save_last: true
+  verbose: true
+
+[2025-03-11 10:57:15,353][__main__][INFO] - Instantiating LightningModule {'_target_': 'emg2qwerty.lightning.TDSConvCTCModule', 'in_features': 528, 'mlp_features': [384], 'block_channels': [24, 24, 24, 24], 'kernel_width': 32}
+[2025-03-11 10:57:15,421][__main__][INFO] - Instantiating LightningDataModule {'_target_': 'emg2qwerty.lightning.WindowedEMGDataModule', 'window_length': 8000, 'padding': [1800, 200]}
+Sanity Checking: 0it [00:00, ?it/s]Sanity Checking:   0%|          | 0/2 [00:00<?, ?it/s]Sanity Checking DataLoader 0:   0%|          | 0/2 [00:00<?, ?it/s]Sanity Checking DataLoader 0:  50%|█████     | 1/2 [00:00<00:00,  1.73it/s]Sanity Checking DataLoader 0: 100%|██████████| 2/2 [00:00<00:00,  2.95it/s]                                                                           Training: 0it [00:00, ?it/s]Training:   0%|          | 0/43 [00:00<?, ?it/s]Epoch 0:   0%|          | 0/43 [00:00<?, ?it/s] Epoch 0:   2%|▏         | 1/43 [00:08<06:16,  8.97s/it]Epoch 0:   2%|▏         | 1/43 [00:08<06:16,  8.97s/it, loss=370, v_num=0]Epoch 0:   5%|▍         | 2/43 [00:09<03:06,  4.55s/it, loss=370, v_num=0]Epoch 0:   5%|▍         | 2/43 [00:09<03:09,  4.62s/it, loss=305, v_num=0]Epoch 0:   7%|▋         | 3/43 [00:09<02:04,  3.12s/it, loss=305, v_num=0]Epoch 0:   7%|▋         | 3/43 [00:09<02:06,  3.16s/it, loss=330, v_num=0]Epoch 0:   9%|▉         | 4/43 [00:09<01:33,  2.41s/it, loss=330, v_num=0]Epoch 0:   9%|▉         | 4/43 [00:09<01:35,  2.44s/it, loss=345, v_num=0]Epoch 0:  12%|█▏        | 5/43 [00:09<01:15,  1.98s/it, loss=345, v_num=0]Epoch 0:  12%|█▏        | 5/43 [00:10<01:16,  2.00s/it, loss=354, v_num=0]Epoch 0:  14%|█▍        | 6/43 [00:10<01:02,  1.69s/it, loss=354, v_num=0]Epoch 0:  14%|█▍        | 6/43 [00:10<01:03,  1.71s/it, loss=337, v_num=0]Epoch 0:  16%|█▋        | 7/43 [00:10<00:53,  1.49s/it, loss=337, v_num=0]Epoch 0:  16%|█▋        | 7/43 [00:10<00:54,  1.51s/it, loss=343, v_num=0]Epoch 0:  19%|█▊        | 8/43 [00:10<00:46,  1.34s/it, loss=343, v_num=0]Epoch 0:  19%|█▊        | 8/43 [00:10<00:47,  1.35s/it, loss=328, v_num=0]Epoch 0:  21%|██        | 9/43 [00:10<00:41,  1.22s/it, loss=328, v_num=0]Epoch 0:  21%|██        | 9/43 [00:11<00:41,  1.23s/it, loss=353, v_num=0]Epoch 0:  23%|██▎       | 10/43 [00:11<00:37,  1.13s/it, loss=353, v_num=0]Epoch 0:  23%|██▎       | 10/43 [00:11<00:37,  1.14s/it, loss=338, v_num=0]Epoch 0:  26%|██▌       | 11/43 [00:11<00:33,  1.05s/it, loss=338, v_num=0]Epoch 0:  26%|██▌       | 11/43 [00:11<00:33,  1.06s/it, loss=328, v_num=0]Epoch 0:  28%|██▊       | 12/43 [00:11<00:30,  1.02it/s, loss=328, v_num=0]Epoch 0:  28%|██▊       | 12/43 [00:11<00:30,  1.00it/s, loss=333, v_num=0]Epoch 0:  30%|███       | 13/43 [00:12<00:27,  1.08it/s, loss=333, v_num=0]Epoch 0:  30%|███       | 13/43 [00:12<00:28,  1.06it/s, loss=326, v_num=0]Epoch 0:  33%|███▎      | 14/43 [00:12<00:26,  1.10it/s, loss=326, v_num=0]Epoch 0:  33%|███▎      | 14/43 [00:12<00:26,  1.09it/s, loss=320, v_num=0]Epoch 0:  35%|███▍      | 15/43 [00:13<00:24,  1.13it/s, loss=320, v_num=0]Epoch 0:  35%|███▍      | 15/43 [00:13<00:24,  1.12it/s, loss=315, v_num=0]Epoch 0:  37%|███▋      | 16/43 [00:13<00:22,  1.18it/s, loss=315, v_num=0]Epoch 0:  37%|███▋      | 16/43 [00:13<00:23,  1.17it/s, loss=310, v_num=0]Epoch 0:  40%|███▉      | 17/43 [00:13<00:21,  1.23it/s, loss=310, v_num=0]Epoch 0:  40%|███▉      | 17/43 [00:13<00:21,  1.22it/s, loss=307, v_num=0]Epoch 0:  42%|████▏     | 18/43 [00:14<00:20,  1.25it/s, loss=307, v_num=0]Epoch 0:  42%|████▏     | 18/43 [00:14<00:20,  1.24it/s, loss=306, v_num=0]Epoch 0:  44%|████▍     | 19/43 [00:14<00:18,  1.28it/s, loss=306, v_num=0]Epoch 0:  44%|████▍     | 19/43 [00:14<00:18,  1.27it/s, loss=302, v_num=0]Epoch 0:  47%|████▋     | 20/43 [00:15<00:17,  1.31it/s, loss=302, v_num=0]Epoch 0:  47%|████▋     | 20/43 [00:15<00:17,  1.30it/s, loss=301, v_num=0]Epoch 0:  49%|████▉     | 21/43 [00:15<00:16,  1.34it/s, loss=301, v_num=0]Epoch 0:  49%|████▉     | 21/43 [00:15<00:16,  1.33it/s, loss=296, v_num=0]Epoch 0:  51%|█████     | 22/43 [00:16<00:15,  1.37it/s, loss=296, v_num=0]Epoch 0:  51%|█████     | 22/43 [00:16<00:15,  1.36it/s, loss=295, v_num=0]
