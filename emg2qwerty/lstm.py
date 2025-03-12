@@ -54,11 +54,17 @@ class LSTMCTCModule(pl.LightningModule):
             ),
             # (T, N, num_features)
             nn.Flatten(start_dim=2),
+            #change this have to; ask bryan
+            # TDSLSTMEncoder(
+            #     num_features=num_features,
+            #     lstm_hidden_size=128,
+            #     num_lstm_layers=4,
+            # ),
             TDSLSTMEncoder(
                 num_features=num_features,
-                lstm_hidden_size=128,
-                num_lstm_layers=4,
+                efficientnet_version="efficientnet_b0",  # Pass EfficientNet version if needed
             ),
+            #change this have to ^
             # (T, N, num_classes)
             nn.Linear(num_features, charset().num_classes),
             nn.LogSoftmax(dim=-1),

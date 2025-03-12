@@ -8,6 +8,8 @@ from collections.abc import Sequence
 
 import torch
 from torch import nn
+import torchvision.models as models
+
 
 
 class SpectrogramNorm(nn.Module):
@@ -279,41 +281,127 @@ class TDSConvEncoder(nn.Module):
     def forward(self, inputs: torch.Tensor) -> torch.Tensor:
         return self.tds_conv_blocks(inputs)  # (T, N, num_features)
 
+# class TDSLSTMEncoder(nn.Module):
+#     """A time depth-separable convolutional encoder composing a sequence
+#     of `TDSConv2dBlock` and `TDSFullyConnectedBlock` as per
+#     "Sequence-to-Sequence Speech Recognition with Time-Depth Separable
+#     Convolutions, Hannun et al" (https://arxiv.org/abs/1904.02619).
+
+#     Args:
+#         num_features (int): ``num_features`` for an input of shape
+#             (T, N, num_features).
+#         block_channels (list): A list of integers indicating the number
+#             of channels per `TDSConv2dBlock`.
+#         kernel_width (int): The kernel size of the temporal convolutions.
+#     """
+
+#     #CHANGE THIS CODE
+#     def __init__(
+#         self,
+#         num_features: int,
+#         lstm_hidden_size: int = 128,
+#         num_lstm_layers: int = 4,
+#     ) -> None:
+#         super().__init__()
+
+#         self.lstm_layers = nn.LSTM(
+#             input_size=num_features,
+#             hidden_size=lstm_hidden_size,
+#             num_layers=num_lstm_layers,
+#             batch_first=False,
+#             bidirectional=True
+#         )
+#     #END OF CHANGE THIS CODE
+#         self.fc_block = TDSFullyConnectedBlock(lstm_hidden_size*2)
+#         self.out_layer = nn.Linear(lstm_hidden_size*2, num_features)
+
+#     def forward(self, inputs: torch.Tensor) -> torch.Tensor:
+#         x, _ = self.lstm_layers(inputs)
+#         x = self.fc_block(x)
+#         x = self.out_layer(x)
+#         return x
+    
 class TDSLSTMEncoder(nn.Module):
-    """A time depth-separable convolutional encoder composing a sequence
-    of `TDSConv2dBlock` and `TDSFullyConnectedBlock` as per
-    "Sequence-to-Sequence Speech Recognition with Time-Depth Separable
-    Convolutions, Hannun et al" (https://arxiv.org/abs/1904.02619).
-
-    Args:
-        num_features (int): ``num_features`` for an input of shape
-            (T, N, num_features).
-        block_channels (list): A list of integers indicating the number
-            of channels per `TDSConv2dBlock`.
-        kernel_width (int): The kernel size of the temporal convolutions.
-    """
-
     def __init__(
         self,
         num_features: int,
-        lstm_hidden_size: int = 128,
-        num_lstm_layers: int = 4,
-    ) -> None:
+        efficientnet_version: str = "efficientnet_b0",
+) -> None:
         super().__init__()
 
-        self.lstm_layers = nn.LSTM(
-            input_size=num_features,
-            hidden_size=lstm_hidden_size,
-            num_layers=num_lstm_layers,
-            batch_first=False,
-            bidirectional=True
+        # Load a pretrained EfficientNet model (adjust version as needed)
+        self.efficient_net = models.efficientnet_b0(pretrained=True)
+
+        # Modify the first layer to accept `num_features` channels instead of 3 (RGB)
+        self.efficient_net.features[0][0] = nn.Conv2d(
+            in_channels=num_features,  # Match input features
+            out_channels=self.efficient_net.features[0][0].out_channels,
+            kernel_size=self.efficient_net.features[0][0].kernel_size,
+            stride=self.efficient_net.features[0][0].stride,
+            padding=self.efficient_net.features[0][0].padding
         )
 
-        self.fc_block = TDSFullyConnectedBlock(lstm_hidden_size*2)
-        self.out_layer = nn.Linear(lstm_hidden_size*2, num_features)
+        # Get the output size of EfficientNet's last layer
+        self.efficient_net_out_size = self.efficient_net.classifier[1].in_features
+
+        self.fc_block = TDSFullyConnectedBlock(self.efficient_net_out_size)
+        self.out_layer = nn.Linear(self.efficient_net_out_size, num_features)
+
+    # def forward(self, inputs: torch.Tensor) -> torch.Tensor:
+    #     # Reshape inputs to match EfficientNet's expected input shape
+    #     x = inputs.permute(1, 0, 2)  # Convert (T, N, F) → (N, F, T)
+    #     x = x.unsqueeze(1)  # Add a channel dimension if needed → (N, 1, F, T)
+
+    #     x = self.efficient_net(x)  # Pass through EfficientNet
+    #     x = self.fc_block(x)
+    #     x = self.out_layer(x)
+
+    #     return x
+    
+
+    # def forward(self, inputs: torch.Tensor) -> torch.Tensor:
+    #     # Reshape (T, N, F) → (N, F, T)
+    #     x = inputs.permute(1, 2, 0)  
+
+    #     # EfficientNet expects (N, C, H, W), so adjust dimensions
+    #     x = x.unsqueeze(1)  # Add a single channel → (N, 1, F, T)
+
+    #     # Expand channels if EfficientNet expects 3-channel input (like RGB)
+    #     x = x.repeat(1, 3, 1, 1)  # Convert (N, 1, F, T) → (N, 3, F, T)
+
+    #     # Pass through EfficientNet
+    #     x = self.efficient_net(x)
+
+    #     # EfficientNet output may be (N, X, Y, Z) → Flatten to (N, -1)
+    #     x = x.view(x.shape[0], -1)
+
+    #     # Fully connected layers
+    #     x = self.fc_block(x)
+    #     x = self.out_layer(x)
+
+    #     return x
+    
 
     def forward(self, inputs: torch.Tensor) -> torch.Tensor:
-       x, _ = self.lstm_layers(inputs)
-       x = self.fc_block(x)
-       x = self.out_layer(x)
-       return x
+        # Reshape (T, N, F) → (N, F, T)
+        x = inputs.permute(1, 2, 0)  
+
+        # Ensure EfficientNet receives (N, C, H, W)
+        # If EfficientNet expects 768 input channels, adjust the channel dim:
+        x = x.unsqueeze(1)  # Add a dummy channel → (N, 1, F, T)
+
+        # Use a 1x1 convolution to match the required 768 channels
+        channel_projection = nn.Conv2d(1, 768, kernel_size=1)  # (N, 1, F, T) → (N, 768, F, T)
+        x = channel_projection(x)
+
+        # Pass through EfficientNet
+        x = self.efficient_net(x)
+
+        # Flatten EfficientNet output
+        x = x.view(x.shape[0], -1)
+
+        # Fully connected layers
+        x = self.fc_block(x)
+        x = self.out_layer(x)
+
+        return x
