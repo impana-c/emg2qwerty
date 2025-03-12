@@ -294,7 +294,7 @@ class TDSGRUEncoder(nn.Module):
         self,
         num_features: int,
         gru_hidden_size: int = 128,
-        num_gru_layers: int = 4,
+        num_gru_layers: int = 2,
     ) -> None:
         super().__init__()
 
@@ -329,7 +329,7 @@ class TDSGRUCNNEncoder(nn.Module):
         self,
         num_features: int,
         gru_hidden_size: int = 128,
-        num_gru_layers: int = 4,
+        num_gru_layers: int = 2,
     ) -> None:
         super().__init__()
 

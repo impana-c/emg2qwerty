@@ -55,7 +55,7 @@ class GRUCNNCTCModule(pl.LightningModule):
             ),
             # (T, N, num_features)
             nn.Flatten(start_dim=2),
-            TDSLSTMCNNEncoder(
+            TDSGRUCNNEncoder(
                 num_features=num_features,
                 gru_hidden_size=128,
                 num_gru_layers=4,
