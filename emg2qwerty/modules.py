@@ -10,7 +10,7 @@ import torch
 from torch import nn
 import torchvision.models as models
 
-
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class SpectrogramNorm(nn.Module):
     """A `torch.nn.Module` that applies 2D batch normalization over spectrogram
@@ -325,12 +325,12 @@ class TDSLSTMEncoder(nn.Module):
     def __init__(
         self,
         num_features: int,
-        efficientnet_version: str = "efficientnet_b0",
+        efficientnet_version: str = "efficientnet_b4",
 ) -> None:
         super().__init__()
 
         # Load a pretrained EfficientNet model (adjust version as needed)
-        self.efficient_net = models.efficientnet_b0(pretrained=True)
+        self.efficient_net = models.efficientnet_v2_s(pretrained=True)
 
         # Modify the first layer to accept `num_features` channels instead of 3 (RGB)
         self.efficient_net.features[0][0] = nn.Conv2d(
@@ -346,6 +346,7 @@ class TDSLSTMEncoder(nn.Module):
 
         self.fc_block = TDSFullyConnectedBlock(self.efficient_net_out_size)
         self.out_layer = nn.Linear(self.efficient_net_out_size, num_features)
+        self.channel_projection = nn.Conv2d(1, 768, kernel_size=1)  # (N, 1, F, T) → (N, 768, F, T)
 
     # def forward(self, inputs: torch.Tensor) -> torch.Tensor:
     #     # Reshape inputs to match EfficientNet's expected input shape
@@ -388,11 +389,11 @@ class TDSLSTMEncoder(nn.Module):
 
         # Ensure EfficientNet receives (N, C, H, W)
         # If EfficientNet expects 768 input channels, adjust the channel dim:
-        x = x.unsqueeze(1)  # Add a dummy channel → (N, 1, F, T)
+        x = x.unsqueeze(1).to(device)  # Add a dummy channel → (N, 1, F, T)
 
         # Use a 1x1 convolution to match the required 768 channels
-        channel_projection = nn.Conv2d(1, 768, kernel_size=1)  # (N, 1, F, T) → (N, 768, F, T)
-        x = channel_projection(x)
+        
+        x = self.channel_projection(x)
 
         # Pass through EfficientNet
         x = self.efficient_net(x)
