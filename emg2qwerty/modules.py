@@ -278,3 +278,14 @@ class TDSConvEncoder(nn.Module):
 
     def forward(self, inputs: torch.Tensor) -> torch.Tensor:
         return self.tds_conv_blocks(inputs)  # (T, N, num_features)
+from transformers import AutoTokenizer, AutoModelForCausalLM
+class GPT2:
+    def __init__(self):
+        super().__init__()
+        # Load model directly
+
+
+        self.tokenizer = AutoTokenizer.from_pretrained("openai-community/gpt2")
+        self.model = AutoModelForCausalLM.from_pretrained("openai-community/gpt2")
+    def forward(self, inputs: torch.Tensor) -> torch.Tensor:
+        return self.model(inputs)  # (T, N, num_features)

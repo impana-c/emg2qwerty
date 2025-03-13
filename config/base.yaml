@@ -1,5 +1,5 @@
 defaults:
-  - user: single_user
+  - user: generic
   - transforms: log_spectrogram
   - model: tds_conv_ctc
   - optimizer: adam
