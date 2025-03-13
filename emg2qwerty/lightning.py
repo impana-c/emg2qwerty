@@ -297,7 +297,7 @@ class TransformerModel(pl.LightningModule):
             lr_scheduler_config=self.hparams.lr_scheduler,
         )
 
-class GPT2(pl.LightningModule):
+class GPT2Model(pl.LightningModule):
     NUM_BANDS: ClassVar[int] = 2
     ELECTRODE_CHANNELS: ClassVar[int] = 16
 
@@ -328,7 +328,6 @@ class GPT2(pl.LightningModule):
                 num_bands=self.NUM_BANDS,
             ),
             nn.Flatten(start_dim=2),
-            GPT2()
             # nn.Linear(num_features, num_features)
         )
         self.positional_encoding = PositionalEncoding(num_features, dropout)
@@ -337,7 +336,7 @@ class GPT2(pl.LightningModule):
         #     nn.TransformerEncoder(encoder_layer, n_layer),
         #     nn.Linear(num_features, charset().num_classes)
         # )
-        self.model = Transformer(in_features, self.NUM_BANDS, self.ELECTRODE_CHANNELS)
+        self.model = GPT2(num_features, charset().num_classes)
         self.softmax = nn.LogSoftmax(dim=-1)
 
         # Criterion
@@ -364,9 +363,10 @@ class GPT2(pl.LightningModule):
     #     out = self.softmax(out)
     #     out = out.permute(1, 0, 2)
     #     return out
-    def forward(self, inputs, seq_len) -> torch.Tensor:
-        out = self.model(inputs, seq_len)
-        return self.softmax(out.permute(1, 0, 2))
+    def forward(self, inputs) -> torch.Tensor:
+        x = self.tokenizer(inputs)
+        x = self.model(x)
+        return self.softmax(x)
 
     def _step(
         self, phase: str, batch: dict[str, torch.Tensor], *args, **kwargs
@@ -377,7 +377,7 @@ class GPT2(pl.LightningModule):
         target_lengths = batch["target_lengths"]
         N = len(input_lengths)  # batch_size
 
-        emissions = self.forward(inputs, input_lengths)
+        emissions = self.forward(inputs)
         # emissions = emissions.permute(1, 0, 2)
         # Shrink input lengths by an amount equivalent to the conv encoder's
         # temporal receptive field to compute output activation lengths for CTCLoss.

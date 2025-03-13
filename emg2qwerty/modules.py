@@ -278,14 +278,37 @@ class TDSConvEncoder(nn.Module):
 
     def forward(self, inputs: torch.Tensor) -> torch.Tensor:
         return self.tds_conv_blocks(inputs)  # (T, N, num_features)
-from transformers import AutoTokenizer, AutoModelForCausalLM
-class GPT2:
-    def __init__(self):
+
+from transformers import GPT2Model, GPT2Config
+class GPT2(nn.Module):
+    def __init__(self, num_features, num_classes):
         super().__init__()
         # Load model directly
 
 
-        self.tokenizer = AutoTokenizer.from_pretrained("openai-community/gpt2")
-        self.model = AutoModelForCausalLM.from_pretrained("openai-community/gpt2")
+        # self.tokenizer = AutoTokenizer.from_pretrained("openai-community/gpt2")
+        # self.model = AutoModelForCausalLM.from_pretrained("openai-community/gpt2")
+        # Load GPT-2 Configuration
+        self.config = GPT2Config.from_pretrained("gpt2")
+
+        # Adjust hidden size based on GPT-2 model
+        hidden_size = self.config.n_embd
+
+        # Feature projection: Convert (T, N, num_features) -> (T, N, hidden_size)
+        self.feature_projection = nn.Linear(num_features, hidden_size)
+
+        # Load pre-trained GPT-2 model (without token embeddings)
+        self.gpt2 = GPT2Model(self.config)
+    
+        # for param in self.gpt2.parameters():
+        #     param.requires_grad = False
+
+        # Optional: Output projection if needed
+        self.output_layer = nn.Linear(hidden_size, num_classes)  # Maps back to original feature space
+
     def forward(self, inputs: torch.Tensor) -> torch.Tensor:
-        return self.model(inputs)  # (T, N, num_features)
+        x = self.feature_projection(inputs)
+        # with torch.no_grad():
+        x = self.gpt2(inputs_embeds=x).last_hidden_state
+        x = self.output_layer(x)
+        return x # (T, N, num_features)
