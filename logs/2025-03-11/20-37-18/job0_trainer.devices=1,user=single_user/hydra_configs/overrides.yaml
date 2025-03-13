@@ -1,0 +1,4 @@
+- user=single_user
+- checkpoint=/home/bkwan27/emg2qwerty/logs/2025-03-11/18-32-54/job0_trainer.devices\=1\,user\=single_user/checkpoints/last.ckpt
+- trainer.accelerator=gpu
+- trainer.devices=1

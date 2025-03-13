@@ -156,7 +156,29 @@ class TemporalAlignmentJitter:
             right = right[-offset:]
 
         return torch.stack([left, right], dim=self.stack_dim)
+    
 
+# @dataclass
+# class SelectChannels:
+#     """Applies a temporal jittering augmentation that randomly jitters the
+#     alignment of left and right EMG data by up to ``max_offset`` timesteps.
+#     The input must be of shape (T, ...).
+
+#     Args:
+#         max_offset (int): The maximum amount of alignment jittering in terms
+#             of number of timesteps.
+#         stack_dim (int): The dimension along which the left and right data
+#             are stacked. See ``ToTensor()``. (default: 1)
+#     """
+
+#     max_offset: int
+#     stack_dim: int = 1
+
+#     def __post_init__(self) -> None:
+#         assert self.max_offset >= 0
+
+#     def __call__(self, tensor: torch.Tensor) -> torch.Tensor:
+        
 
 @dataclass
 class LogSpectrogram:

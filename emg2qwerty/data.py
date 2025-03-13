@@ -497,7 +497,12 @@ class WindowedEMGDataset(torch.utils.data.Dataset):
         window = self.session[window_start:window_end]
 
         # Extract EMG tensor corresponding to the window.
-        emg = self.transform(window)
+        selected_channels = [0, 15] # 2 channels
+        # selected_channels = [1, 6, 10, 15] # 4 channels
+        #selected_channels = [0, 2, 4, 6, 9, 11, 13, 15] # 8 channels
+        #selected_channels = [0, 1, 2, 4, 5, 6, 8, 9, 11, 13, 14, 15] # 12 channels
+
+        emg = self.transform(window)[..., selected_channels, :]
         assert torch.is_tensor(emg)
 
         # Extract labels corresponding to the original (un-padded) window.

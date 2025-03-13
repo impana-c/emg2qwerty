@@ -1,0 +1,109 @@
+2025-03-12 12:55:01.033019: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1741809301.059660  499544 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1741809301.067521  499544 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-12 12:55:01.094753: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Global seed set to 1501
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=EfficientNet_V2_S_Weights.IMAGENET1K_V1`. You can also use `weights=EfficientNet_V2_S_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Downloading: "https://download.pytorch.org/models/efficientnet_v2_s-dd5fe13b.pth" to /home/bkwan27/.cache/torch/hub/checkpoints/efficientnet_v2_s-dd5fe13b.pth
+  0%|          | 0.00/82.7M [00:00<?, ?B/s]  2%|▏         | 1.62M/82.7M [00:00<00:05, 16.5MB/s]  8%|▊         | 6.50M/82.7M [00:00<00:02, 36.2MB/s] 15%|█▌        | 12.8M/82.7M [00:00<00:01, 49.4MB/s] 22%|██▏       | 18.2M/82.7M [00:00<00:01, 52.1MB/s] 28%|██▊       | 23.2M/82.7M [00:00<00:01, 51.0MB/s] 34%|███▍      | 28.1M/82.7M [00:00<00:01, 48.0MB/s] 40%|███▉      | 32.8M/82.7M [00:00<00:01, 46.1MB/s] 46%|████▌     | 37.9M/82.7M [00:00<00:00, 48.2MB/s] 52%|█████▏    | 42.9M/82.7M [00:00<00:00, 49.2MB/s] 58%|█████▊    | 47.6M/82.7M [00:01<00:00, 46.1MB/s] 63%|██████▎   | 52.1M/82.7M [00:01<00:00, 44.7MB/s] 68%|██████▊   | 56.5M/82.7M [00:01<00:00, 41.8MB/s] 81%|████████▏ | 67.2M/82.7M [00:01<00:00, 58.9MB/s] 94%|█████████▍| 77.6M/82.7M [00:01<00:00, 72.3MB/s]100%|██████████| 82.7M/82.7M [00:01<00:00, 52.9MB/s]
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+2025-03-12 12:55:27.919758: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1741809327.967868  500623 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1741809327.975032  500623 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-12 12:55:28.001247: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/4
+2025-03-12 12:55:47.909090: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1741809347.934285  501121 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1741809347.942123  501121 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-12 12:55:47.973594: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Initializing distributed: GLOBAL_RANK: 1, MEMBER: 2/4
+Missing logger folder: /home/bkwan27/emg2qwerty/logs/2025-03-12/12-54-54/job0_trainer.devices=4,user=single_user/lightning_logs
+2025-03-12 12:56:07.595588: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1741809367.626342  501603 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1741809367.635057  501603 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-12 12:56:07.666355: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Initializing distributed: GLOBAL_RANK: 2, MEMBER: 3/4
+Missing logger folder: /home/bkwan27/emg2qwerty/logs/2025-03-12/12-54-54/job0_trainer.devices=4,user=single_user/lightning_logs
+2025-03-12 12:56:28.093749: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1741809388.117655  502075 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1741809388.124929  502075 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-12 12:56:28.150145: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Initializing distributed: GLOBAL_RANK: 3, MEMBER: 4/4
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 4 processes
+----------------------------------------------------------------------------------------------------
+
+Missing logger folder: /home/bkwan27/emg2qwerty/logs/2025-03-12/12-54-54/job0_trainer.devices=4,user=single_user/lightning_logs
+Missing logger folder: /home/bkwan27/emg2qwerty/logs/2025-03-12/12-54-54/job0_trainer.devices=4,user=single_user/lightning_logs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+LOCAL_RANK: 3 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+LOCAL_RANK: 2 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/__init__.py:11: FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
+  if not hasattr(numpy, tp_name):
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/__init__.py:11: FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
+  if not hasattr(numpy, tp_name):
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/__init__.py:11: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+  if not hasattr(numpy, tp_name):
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/__init__.py:11: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+  if not hasattr(numpy, tp_name):
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/__init__.py:11: FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
+  if not hasattr(numpy, tp_name):
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/__init__.py:11: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+  if not hasattr(numpy, tp_name):
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/__init__.py:11: FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
+  if not hasattr(numpy, tp_name):
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/__init__.py:11: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+  if not hasattr(numpy, tp_name):
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/models/self_supervised/amdim/amdim_module.py:34: UnderReviewWarning: The feature generate_power_seq is currently marked under review. The compatibility with other Lightning projects is not guaranteed and API may change at any time. The API and functionality may change without warning in future releases. More details: https://lightning-bolts.readthedocs.io/en/latest/stability.html
+  "lr_options": generate_power_seq(LEARNING_RATE_CIFAR, 11),
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/models/self_supervised/amdim/amdim_module.py:92: UnderReviewWarning: The feature FeatureMapContrastiveTask is currently marked under review. The compatibility with other Lightning projects is not guaranteed and API may change at any time. The API and functionality may change without warning in future releases. More details: https://lightning-bolts.readthedocs.io/en/latest/stability.html
+  contrastive_task: Union[FeatureMapContrastiveTask] = FeatureMapContrastiveTask("01, 02, 11"),
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/pl_bolts/losses/self_supervised_learning.py:228: UnderReviewWarning: The feature AmdimNCELoss is currently marked under review. The compatibility with other Lightning projects is not guaranteed and API may change at any time. The API and functionality may change without warning in future releases. More details: https://lightning-bolts.readthedocs.io/en/latest/stability.html
+  self.nce_loss = AmdimNCELoss(tclip)
+/home/bkwan27/anaconda3/lib/python3.10/site-packages/hydra/_internal/instantiate/_instantiate2.py:92: UnderReviewWarning: The feature LinearWarmupCosineAnnealingLR is currently marked under review. The compatibility with other Lightning projects is not guaranteed and API may change at any time. The API and functionality may change without warning in future releases. More details: https://lightning-bolts.readthedocs.io/en/latest/stability.html
+  return _target_(*args, **kwargs)
+
+  | Name     | Type       | Params
+----------------------------------------
+0 | model    | Sequential | 26.4 M
+1 | ctc_loss | CTCLoss    | 0     
+2 | metrics  | ModuleDict | 0     
+----------------------------------------
+26.4 M    Trainable params
+0         Non-trainable params
+26.4 M    Total params
+105.494   Total estimated model params size (MB)
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/home/bkwan27/anaconda3/lib/python3.10/threading.py", line 1016, in _bootstrap_inner
+    self.run()
+  File "/home/bkwan27/anaconda3/lib/python3.10/site-packages/tensorboardX/event_file_writer.py", line 202, in run
+    data = self._queue.get(True, queue_wait_duration)
+  File "/home/bkwan27/anaconda3/lib/python3.10/multiprocessing/queues.py", line 117, in get
+    res = self._recv_bytes()
+  File "/home/bkwan27/anaconda3/lib/python3.10/multiprocessing/connection.py", line 212, in recv_bytes
+    self._check_closed()
+  File "/home/bkwan27/anaconda3/lib/python3.10/multiprocessing/connection.py", line 136, in _check_closed
+    raise OSError("handle is closed")
+OSError: handle is closed
+W0312 12:57:04.341000 127214808409600 torch/multiprocessing/spawn.py:145] Terminating process 501121 via signal SIGTERM
+W0312 12:57:04.345000 127214808409600 torch/multiprocessing/spawn.py:145] Terminating process 501603 via signal SIGTERM
+W0312 12:57:04.347000 127214808409600 torch/multiprocessing/spawn.py:145] Terminating process 502075 via signal SIGTERM
