@@ -61,8 +61,10 @@ class LSTMCTCModule(pl.LightningModule):
             #     num_lstm_layers=4,
             # ),
             TDSLSTMEncoder(
+                channels = 24,
+                width = num_features // 24,
                 num_features=num_features,
-                efficientnet_version="efficientnet_b0",  # Pass EfficientNet version if needed
+                #efficientnet_version="efficientnet_b0",  # Pass EfficientNet version if needed
             ),
             #change this have to ^
             # (T, N, num_classes)
