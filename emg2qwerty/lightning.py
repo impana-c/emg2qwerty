@@ -474,12 +474,12 @@ class TDSConvCTCModule(pl.LightningModule):
             ),
             # (T, N, num_features)
             nn.Flatten(start_dim=2),
-            # TDSConvEncoder(
-            #     num_features=num_features,
-            #     block_channels=block_channels,
-            #     kernel_width=kernel_width,
-            # ),
-            TransformerModel(num_features, self.NUM_BANDS, self.ELECTRODE_CHANNELS),
+            TDSConvEncoder(
+                num_features=num_features,
+                block_channels=block_channels,
+                kernel_width=kernel_width,
+            ),
+            # TransformerModel(num_features, self.NUM_BANDS, self.ELECTRODE_CHANNELS),
             # (T, N, num_classes)
             nn.Linear(num_features, charset().num_classes),
             nn.LogSoftmax(dim=-1),
