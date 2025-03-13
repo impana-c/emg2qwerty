@@ -280,7 +280,7 @@ class SpecAugment:
         x = specgram.movedim(0, -1)
 
         # stretch_rate = np.random.uniform(self.time_stretch_min, self.time_stretch_max)
-        x = self.time_warp(x)
+        # x = self.time_warp(x)
         # Time masks
         n_t_masks = np.random.randint(self.n_time_masks + 1)
         for _ in range(n_t_masks):
