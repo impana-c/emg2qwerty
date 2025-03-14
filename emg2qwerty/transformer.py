@@ -183,6 +183,7 @@ class TransformerDecoder(nn.Module):
         super().__init__()
         
         #self.positional_encodings = nn.Parameter(torch.randn(seq_len, n_embd))
+        self.tokenizer = nn.Linear(in_features, n_embd)
         self.blocks = nn.Sequential(*[Block(n_embd, n_head=n_head) for _ in range(n_layer)])
 
         self.ln_f = nn.LayerNorm(n_embd) 
@@ -198,10 +199,10 @@ class TransformerDecoder(nn.Module):
         elif isinstance(module, nn.Embedding):
             torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
     
-    def forward(self, x, seq_len, targets=None):
+    def forward(self, x, targets=None):
         # print(x.shape)
-        max_len = torch.max(seq_len)
-        pos_enc = PositionalEncoding(n_embd, dropout, max_len) # (B,T,C)
+        pos_enc = PositionalEncoding(n_embd, dropout) # (B,T,C)
+        x = self.tokenizer(x)
         x = x.permute(1, 0, 2)
         x = pos_enc(x) # (B,T,C)
         x = self.blocks(x) # (B,T,C)

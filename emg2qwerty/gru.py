@@ -327,9 +327,9 @@ class pretrainedCNN_Transformer(pl.LightningModule):
         self.model = nn.Sequential(
             # nn.Linear(charset().num_classes, num_features),
             TransformerDecoder(
-                in_featueres=num_features,
-                num_bands=2,
-                electrode_channels=16,
+                num_features,
+                2,
+                16,
             ),
             # (T, N, num_classes)
             nn.LogSoftmax(dim=-1),
@@ -357,6 +357,7 @@ class pretrainedCNN_Transformer(pl.LightningModule):
         with torch.no_grad():
             _ = self.cnn_backbone(inputs)
         x = self.model(extracted_features)
+        x = x.permute(1, 0, 2)
         return x
 
     def _step(
