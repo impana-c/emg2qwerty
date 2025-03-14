@@ -41,9 +41,6 @@ transforms:
   train:
     - ${to_tensor}
     - ${band_rotation}
-    - ${time_warp}
-    - ${scaling}
-    - ${gaussian_noise}
     - ${temporal_jitter}
     - ${logspec}
     - ${specaug}
