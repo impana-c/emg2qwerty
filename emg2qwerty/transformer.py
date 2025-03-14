@@ -177,3 +177,35 @@ class Transformer(nn.Module):
         logits = self.lm_head(x) # (B,T,n_classes)
         #print(logits.shape)
         return logits
+
+class TransformerDecoder(nn.Module):
+    def __init__(self, in_features, num_bands, electrode_channels):
+        super().__init__()
+        
+        #self.positional_encodings = nn.Parameter(torch.randn(seq_len, n_embd))
+        self.blocks = nn.Sequential(*[Block(n_embd, n_head=n_head) for _ in range(n_layer)])
+
+        self.ln_f = nn.LayerNorm(n_embd) 
+        self.lm_head = nn.Linear(n_embd, num_classes)
+
+        self.apply(self._init_weights)
+    
+    def _init_weights(self, module):
+        if isinstance(module, nn.Linear):
+            torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
+            if module.bias is not None:
+                torch.nn.init.zeros_(module.bias)
+        elif isinstance(module, nn.Embedding):
+            torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
+    
+    def forward(self, x, seq_len, targets=None):
+        # print(x.shape)
+        max_len = torch.max(seq_len)
+        pos_enc = PositionalEncoding(n_embd, dropout, max_len) # (B,T,C)
+        x = x.permute(1, 0, 2)
+        x = pos_enc(x) # (B,T,C)
+        x = self.blocks(x) # (B,T,C)
+        x = self.ln_f(x) # (B,T,C)
+        logits = self.lm_head(x) # (B,T,n_classes)
+        #print(logits.shape)
+        return logits

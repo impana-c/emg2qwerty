@@ -312,3 +312,42 @@ class GPT2(nn.Module):
         x = self.gpt2(inputs_embeds=x).last_hidden_state
         x = self.output_layer(x)
         return x # (T, N, num_features)
+    
+class TDSGRUEncoder(nn.Module):
+    """A time depth-separable convolutional encoder composing a sequence
+    of `TDSConv2dBlock` and `TDSFullyConnectedBlock` as per
+    "Sequence-to-Sequence Speech Recognition with Time-Depth Separable
+    Convolutions, Hannun et al" (https://arxiv.org/abs/1904.02619).
+
+    Args:
+        num_features (int): ``num_features`` for an input of shape
+            (T, N, num_features).
+        block_channels (list): A list of integers indicating the number
+            of channels per `TDSConv2dBlock`.
+        kernel_width (int): The kernel size of the temporal convolutions.
+    """
+
+    def __init__(
+        self,
+        num_features: int,
+        gru_hidden_size: int = 128,
+        num_gru_layers: int = 4,
+    ) -> None:
+        super().__init__()
+
+        self.gru_layers = nn.GRU(
+            input_size=num_features,
+            hidden_size=gru_hidden_size,
+            num_layers=num_gru_layers,
+            batch_first=False,
+            bidirectional=True
+        )
+
+        self.fc_block = TDSFullyConnectedBlock(gru_hidden_size*2)
+        self.out_layer = nn.Linear(gru_hidden_size*2, num_features)
+
+    def forward(self, inputs: torch.Tensor) -> torch.Tensor:
+       x, _ = self.gru_layers(inputs)
+       x = self.fc_block(x)
+       x = self.out_layer(x)
+       return x
