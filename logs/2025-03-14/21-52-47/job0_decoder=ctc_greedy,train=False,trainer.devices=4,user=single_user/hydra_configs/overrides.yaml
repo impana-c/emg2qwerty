@@ -1,0 +1,6 @@
+- user=single_user
+- checkpoint=/home/bkwan27/emg2qwerty/logs/Base\ Models/Transformer/job0_trainer.devices\=1\,user\=single_user/checkpoints/epoch\=147-step\=17760.ckpt
+- train=False
+- trainer.accelerator=gpu
+- trainer.devices=4
+- decoder=ctc_greedy
