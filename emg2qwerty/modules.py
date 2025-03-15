@@ -317,3 +317,129 @@ class TDSGRUEncoder(nn.Module):
        x = self.fc_block(x)
        x = self.out_layer(x)
        return x
+    
+class TDSGRUEncoder(nn.Module):
+    """A time depth-separable convolutional encoder followed by a Bi-GRU layer.
+    
+    This combines CNN-based feature extraction with RNN-based sequence modeling.
+    
+    Args:
+        num_features (int): Number of input features.
+        gru_hidden_size (int): Hidden size for the GRU.
+        num_gru_layers (int): Number of GRU layers.
+    """
+
+    def __init__(
+        self,
+        num_features: int,
+        gru_hidden_size: int = 128,
+        num_gru_layers: int = 2,
+    ) -> None:
+        super().__init__()
+
+        self.gru_layers = nn.GRU(
+            input_size=num_features,
+            hidden_size=gru_hidden_size,
+            num_layers=num_gru_layers,
+            batch_first=False,
+            bidirectional=True
+        )
+
+        self.fc_block = TDSFullyConnectedBlock(gru_hidden_size*2)
+        self.out_layer = nn.Linear(gru_hidden_size*2, num_features)
+
+    def forward(self, inputs: torch.Tensor) -> torch.Tensor:
+       x, _ = self.gru_layers(inputs)
+       x = self.fc_block(x)
+       x = self.out_layer(x)
+       return x
+
+class TDSGRUCNNEncoder(nn.Module):
+    """A hybrid CNN-RNN encoder that combines time-depth separable convolution
+    with a Bi-GRU for sequence modeling.
+    
+    Args:
+        num_features (int): Number of input features.
+        gru_hidden_size (int): Hidden size for the GRU.
+        num_gru_layers (int): Number of GRU layers.
+    """
+
+    def __init__(
+        self,
+        num_features: int,
+        gru_hidden_size: int = 128,
+        num_gru_layers: int = 2,
+    ) -> None:
+        super().__init__()
+
+        self.conv_encoder = TDSConvEncoder(
+            num_features=num_features,
+            block_channels=[24, 24, 24, 24],  
+            kernel_width=32,
+        )
+
+        self.gru_layers = nn.GRU(
+            input_size=num_features,
+            hidden_size=gru_hidden_size,
+            num_layers=num_gru_layers,
+            batch_first=False,
+            bidirectional=True,
+        )
+
+        self.fc_block = TDSFullyConnectedBlock(gru_hidden_size * 2)
+        self.out_layer = nn.Linear(gru_hidden_size * 2, num_features)
+
+    def forward(self, inputs: torch.Tensor) -> torch.Tensor:
+        # Pass through TDS Convolutional Encoder
+        x = self.conv_encoder(inputs)  # (T, N, num_features)
+
+        x, _ = self.gru_layers(x)
+        x = self.fc_block(x)
+        x = self.out_layer(x)
+        return x
+    
+
+class TDSLSTMCNNEncoder(nn.Module):
+    """A hybrid CNN-RNN encoder that combines time-depth separable convolution
+    with a Bi-GRU for sequence modeling.
+    
+    Args:
+        num_features (int): Number of input features.
+        gru_hidden_size (int): Hidden size for the GRU.
+        num_gru_layers (int): Number of GRU layers.
+    """
+
+    def __init__(
+        self,
+        num_features: int,
+        gru_hidden_size: int = 128,
+        num_gru_layers: int = 4,
+    ) -> None:
+        super().__init__()
+
+        self.conv_encoder = TDSConvEncoder(
+            num_features=num_features,
+            block_channels=[24, 24, 24, 24],  
+            kernel_width=32,
+        )
+
+        self.gru_layers = nn.LSTM(
+            input_size=num_features,
+            hidden_size=gru_hidden_size,
+            num_layers=num_gru_layers,
+            batch_first=False,
+            bidirectional=True,
+        )
+
+        self.fc_block = TDSFullyConnectedBlock(gru_hidden_size * 2)
+        self.out_layer = nn.Linear(gru_hidden_size * 2, num_features)
+
+    def forward(self, inputs: torch.Tensor) -> torch.Tensor:
+        # Pass through TDS Convolutional Encoder
+        # x, _ = self.gru_layers(inputs)
+        x = self.conv_encoder(inputs)  # (T, N, num_features)
+
+        x, _ = self.gru_layers(x)
+        x = self.fc_block(x)
+        x = self.out_layer(x)
+        return x
