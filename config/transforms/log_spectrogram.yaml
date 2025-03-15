@@ -25,6 +25,18 @@ specaug:
   n_freq_masks: 2
   freq_mask_param: 4
 
+time_warp:
+  _target_: emg2qwerty.transforms.TimeWarp
+  time_warp_param: 5
+
+gaussian_noise:
+  _target_: emg2qwerty.transforms.GaussianNoiseInjection
+  mean: 0
+  std: 0.05
+
+scaling:
+  _target_: emg2qwerty.transforms.Scaling
+
 transforms:
   train:
     - ${to_tensor}

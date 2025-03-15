@@ -279,36 +279,167 @@ class TDSConvEncoder(nn.Module):
     def forward(self, inputs: torch.Tensor) -> torch.Tensor:
         return self.tds_conv_blocks(inputs)  # (T, N, num_features)
 
-from transformers import GPT2Model, GPT2Config
-class GPT2(nn.Module):
-    def __init__(self, num_features, num_classes):
+class TDSGRUEncoder(nn.Module):
+    """A time depth-separable convolutional encoder composing a sequence
+    of `TDSConv2dBlock` and `TDSFullyConnectedBlock` as per
+    "Sequence-to-Sequence Speech Recognition with Time-Depth Separable
+    Convolutions, Hannun et al" (https://arxiv.org/abs/1904.02619).
+
+    Args:
+        num_features (int): ``num_features`` for an input of shape
+            (T, N, num_features).
+        block_channels (list): A list of integers indicating the number
+            of channels per `TDSConv2dBlock`.
+        kernel_width (int): The kernel size of the temporal convolutions.
+    """
+
+    def __init__(
+        self,
+        num_features: int,
+        gru_hidden_size: int = 128,
+        num_gru_layers: int = 4,
+    ) -> None:
         super().__init__()
-        # Load model directly
 
+        self.gru_layers = nn.GRU(
+            input_size=num_features,
+            hidden_size=gru_hidden_size,
+            num_layers=num_gru_layers,
+            batch_first=False,
+            bidirectional=True
+        )
 
-        # self.tokenizer = AutoTokenizer.from_pretrained("openai-community/gpt2")
-        # self.model = AutoModelForCausalLM.from_pretrained("openai-community/gpt2")
-        # Load GPT-2 Configuration
-        self.config = GPT2Config.from_pretrained("gpt2")
-
-        # Adjust hidden size based on GPT-2 model
-        hidden_size = self.config.n_embd
-
-        # Feature projection: Convert (T, N, num_features) -> (T, N, hidden_size)
-        self.feature_projection = nn.Linear(num_features, hidden_size)
-
-        # Load pre-trained GPT-2 model (without token embeddings)
-        self.gpt2 = GPT2Model(self.config)
-    
-        # for param in self.gpt2.parameters():
-        #     param.requires_grad = False
-
-        # Optional: Output projection if needed
-        self.output_layer = nn.Linear(hidden_size, num_classes)  # Maps back to original feature space
+        self.fc_block = TDSFullyConnectedBlock(gru_hidden_size*2)
+        self.out_layer = nn.Linear(gru_hidden_size*2, num_features)
 
     def forward(self, inputs: torch.Tensor) -> torch.Tensor:
-        x = self.feature_projection(inputs)
-        # with torch.no_grad():
-        x = self.gpt2(inputs_embeds=x).last_hidden_state
-        x = self.output_layer(x)
-        return x # (T, N, num_features)
+       x, _ = self.gru_layers(inputs)
+       x = self.fc_block(x)
+       x = self.out_layer(x)
+       return x
+    
+class TDSGRUEncoder(nn.Module):
+    """A time depth-separable convolutional encoder followed by a Bi-GRU layer.
+    
+    This combines CNN-based feature extraction with RNN-based sequence modeling.
+    
+    Args:
+        num_features (int): Number of input features.
+        gru_hidden_size (int): Hidden size for the GRU.
+        num_gru_layers (int): Number of GRU layers.
+    """
+
+    def __init__(
+        self,
+        num_features: int,
+        gru_hidden_size: int = 128,
+        num_gru_layers: int = 2,
+    ) -> None:
+        super().__init__()
+
+        self.gru_layers = nn.GRU(
+            input_size=num_features,
+            hidden_size=gru_hidden_size,
+            num_layers=num_gru_layers,
+            batch_first=False,
+            bidirectional=True
+        )
+
+        self.fc_block = TDSFullyConnectedBlock(gru_hidden_size*2)
+        self.out_layer = nn.Linear(gru_hidden_size*2, num_features)
+
+    def forward(self, inputs: torch.Tensor) -> torch.Tensor:
+       x, _ = self.gru_layers(inputs)
+       x = self.fc_block(x)
+       x = self.out_layer(x)
+       return x
+
+class TDSGRUCNNEncoder(nn.Module):
+    """A hybrid CNN-RNN encoder that combines time-depth separable convolution
+    with a Bi-GRU for sequence modeling.
+    
+    Args:
+        num_features (int): Number of input features.
+        gru_hidden_size (int): Hidden size for the GRU.
+        num_gru_layers (int): Number of GRU layers.
+    """
+
+    def __init__(
+        self,
+        num_features: int,
+        gru_hidden_size: int = 128,
+        num_gru_layers: int = 2,
+    ) -> None:
+        super().__init__()
+
+        self.conv_encoder = TDSConvEncoder(
+            num_features=num_features,
+            block_channels=[24, 24, 24, 24],  
+            kernel_width=32,
+        )
+
+        self.gru_layers = nn.GRU(
+            input_size=num_features,
+            hidden_size=gru_hidden_size,
+            num_layers=num_gru_layers,
+            batch_first=False,
+            bidirectional=True,
+        )
+
+        self.fc_block = TDSFullyConnectedBlock(gru_hidden_size * 2)
+        self.out_layer = nn.Linear(gru_hidden_size * 2, num_features)
+
+    def forward(self, inputs: torch.Tensor) -> torch.Tensor:
+        # Pass through TDS Convolutional Encoder
+        x = self.conv_encoder(inputs)  # (T, N, num_features)
+
+        x, _ = self.gru_layers(x)
+        x = self.fc_block(x)
+        x = self.out_layer(x)
+        return x
+    
+
+class TDSLSTMCNNEncoder(nn.Module):
+    """A hybrid CNN-RNN encoder that combines time-depth separable convolution
+    with a Bi-GRU for sequence modeling.
+    
+    Args:
+        num_features (int): Number of input features.
+        gru_hidden_size (int): Hidden size for the GRU.
+        num_gru_layers (int): Number of GRU layers.
+    """
+
+    def __init__(
+        self,
+        num_features: int,
+        gru_hidden_size: int = 128,
+        num_gru_layers: int = 4,
+    ) -> None:
+        super().__init__()
+
+        self.conv_encoder = TDSConvEncoder(
+            num_features=num_features,
+            block_channels=[24, 24, 24, 24],  
+            kernel_width=32,
+        )
+
+        self.gru_layers = nn.LSTM(
+            input_size=num_features,
+            hidden_size=gru_hidden_size,
+            num_layers=num_gru_layers,
+            batch_first=False,
+            bidirectional=True,
+        )
+
+        self.fc_block = TDSFullyConnectedBlock(gru_hidden_size * 2)
+        self.out_layer = nn.Linear(gru_hidden_size * 2, num_features)
+
+    def forward(self, inputs: torch.Tensor) -> torch.Tensor:
+        # Pass through TDS Convolutional Encoder
+        # x, _ = self.gru_layers(inputs)
+        x = self.conv_encoder(inputs)  # (T, N, num_features)
+
+        x, _ = self.gru_layers(x)
+        x = self.fc_block(x)
+        x = self.out_layer(x)
+        return x
